@@ -14,6 +14,42 @@ interface BatchUploaderProps {
   onAnchorChange: (id: string) => void;
 }
 
+// Convert a local File object to a standalone base64 Data URL
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (err) => reject(err);
+    reader.readAsDataURL(file);
+  });
+}
+
+// Fetch an image URL and convert to a standalone base64 Data URL
+async function imageUrlToDataUrl(url: string): Promise<string> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width || 600;
+      canvas.height = img.height || 600;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(img, 0, 0);
+        try {
+          resolve(canvas.toDataURL('image/jpeg', 0.95));
+          return;
+        } catch (e) {
+          // fallback if tainted
+        }
+      }
+      resolve(url);
+    };
+    img.onerror = () => resolve(url);
+    img.src = url;
+  });
+}
+
 export const BatchUploader: React.FC<BatchUploaderProps> = ({
   photos,
   onPhotosChange,
@@ -41,21 +77,25 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
       const file = filesToProcess[i];
       if (!file.type.startsWith('image/')) continue;
 
-      const url = URL.createObjectURL(file);
-      const quality = await analyzePhotoQuality(url);
-      const photoId = `photo-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
+      try {
+        const base64Url = await fileToDataUrl(file);
+        const quality = await analyzePhotoQuality(base64Url);
+        const photoId = `photo-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 
-      newUploadedPhotos.push({
-        id: photoId,
-        url,
-        file,
-        isAnchor: photos.length === 0 && i === 0,
-        clarityScore: quality.clarityScore,
-        lightingScore: quality.lightingScore,
-        hasHeadAndShoulders: quality.hasHeadAndShoulders,
-        detectedAngle: quality.detectedAngle,
-        uploadedAt: new Date()
-      });
+        newUploadedPhotos.push({
+          id: photoId,
+          url: base64Url,
+          file,
+          isAnchor: photos.length === 0 && i === 0,
+          clarityScore: quality.clarityScore,
+          lightingScore: quality.lightingScore,
+          hasHeadAndShoulders: quality.hasHeadAndShoulders,
+          detectedAngle: quality.detectedAngle,
+          uploadedAt: new Date()
+        });
+      } catch (err) {
+        console.error('Error reading file as data URL:', err);
+      }
     }
 
     const updated = [...photos, ...newUploadedPhotos];
@@ -108,11 +148,12 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
     ];
 
     for (let i = 0; i < sampleUrls.length; i++) {
-      const url = sampleUrls[i];
+      const rawUrl = sampleUrls[i];
+      const dataUrl = await imageUrlToDataUrl(rawUrl);
       const photoId = `sample-${Date.now()}-${i}`;
       newPhotos.push({
         id: photoId,
-        url,
+        url: dataUrl,
         file: new File([], `sample-${i}.jpg`),
         isAnchor: photos.length === 0 && i === 0,
         clarityScore: 92 + i * 2,
@@ -161,16 +202,17 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
           <button
             type="button"
             onClick={handleLoadSampleDataset}
+            disabled={isProcessing}
             className={`inline-flex items-center space-x-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border transition-all self-start sm:self-auto shrink-0 ${
               isLight
                 ? 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300'
                 : isTerracotta
                 ? 'bg-[#F4EBE2] hover:bg-[#EFE8DF] text-[#A34B24] border-[#E8DFD5]'
                 : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-slate-700'
-            }`}
+            } disabled:opacity-50`}
           >
             <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-            <span>Try Demo Sample Photos</span>
+            <span>{isProcessing ? 'Processing...' : 'Try Demo Sample Photos'}</span>
           </button>
         )}
       </div>
@@ -210,7 +252,7 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
             </div>
             <div>
               <p className={`text-sm font-semibold ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
-                Drag & Drop 1 to 10 Head & Shoulder Photos
+                {isProcessing ? 'Encoding High-Res Photos...' : 'Drag & Drop 1 to 10 Head & Shoulder Photos'}
               </p>
               <p className="text-xs opacity-75 mt-1">
                 Supports PNG, JPG, or WEBP (Facial features clearly visible)
