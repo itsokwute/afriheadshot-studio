@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { BackgroundPreset, BackgroundCategory } from '../../lib/types';
 import { BACKGROUND_PRESETS } from '../../lib/presets-data';
-import { Building2, Check, MapPin, Sparkles, SlidersHorizontal } from 'lucide-react';
+import { Check, MapPin } from 'lucide-react';
+import { useTheme } from '../../lib/theme-context';
 
 interface BackgroundPickerProps {
   selectedBackground: BackgroundPreset;
@@ -24,6 +25,10 @@ export const BackgroundPicker: React.FC<BackgroundPickerProps> = ({
   selectedBackground,
   onSelectBackground,
 }) => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+  const isTerracotta = theme === 'terracotta';
+
   const [activeCategory, setActiveCategory] = useState<'All' | BackgroundCategory>('All');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -49,7 +54,11 @@ export const BackgroundPicker: React.FC<BackgroundPickerProps> = ({
               onClick={() => setActiveCategory(cat)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                 activeCategory === cat
-                  ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+                  : isLight
+                  ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+                  : isTerracotta
+                  ? 'bg-[#F4EBE2] text-[#2D241E] hover:bg-[#EFE8DF] border border-[#E8DFD5]'
                   : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
               }`}
             >
@@ -65,7 +74,13 @@ export const BackgroundPicker: React.FC<BackgroundPickerProps> = ({
             placeholder="Search 50 backgrounds..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full md:w-56 bg-slate-950 border border-slate-800 rounded-xl px-3 py-1.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
+            className={`w-full md:w-56 rounded-xl px-3 py-1.5 text-xs focus:outline-none focus:border-amber-500 border ${
+              isLight
+                ? 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400'
+                : isTerracotta
+                ? 'bg-white border-[#E8DFD5] text-[#2D241E] placeholder-slate-400'
+                : 'bg-slate-950 border-slate-800 text-white placeholder-slate-500'
+            }`}
           />
         </div>
       </div>
@@ -81,7 +96,11 @@ export const BackgroundPicker: React.FC<BackgroundPickerProps> = ({
               onClick={() => onSelectBackground(bg)}
               className={`relative text-left p-4 rounded-2xl border transition-all flex flex-col justify-between group overflow-hidden ${
                 isSelected
-                  ? 'border-amber-500 bg-amber-500/10 shadow-lg shadow-amber-500/10 ring-2 ring-amber-500/40'
+                  ? 'border-amber-500 bg-amber-500/10 shadow-md ring-2 ring-amber-500/40'
+                  : isLight
+                  ? 'border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm'
+                  : isTerracotta
+                  ? 'border-[#E8DFD5] bg-white hover:border-[#D6C4B4] hover:shadow-sm'
                   : 'border-slate-800/80 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-900'
               }`}
             >
@@ -102,19 +121,21 @@ export const BackgroundPicker: React.FC<BackgroundPickerProps> = ({
 
               {/* Title & Info */}
               <div>
-                <span className="text-[10px] font-bold text-amber-400/80 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-600 uppercase tracking-wider">
                   {bg.category}
                 </span>
-                <h5 className="font-bold text-white text-sm group-hover:text-amber-300 transition-colors">
+                <h5 className={`font-bold text-sm transition-colors ${
+                  isLight ? 'text-slate-900 group-hover:text-amber-600' : isTerracotta ? 'text-[#2D241E] group-hover:text-[#C86D44]' : 'text-white group-hover:text-amber-300'
+                }`}>
                   {bg.title}
                 </h5>
-                <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                <p className="text-xs opacity-75 mt-1 line-clamp-2 leading-relaxed">
                   {bg.description}
                 </p>
               </div>
 
               {/* Lighting Badge */}
-              <div className="mt-3 pt-2 border-t border-slate-800/60 flex items-center justify-between text-[10px] text-slate-400">
+              <div className="mt-3 pt-2 border-t border-slate-200/40 flex items-center justify-between text-[10px] opacity-75">
                 <span className="truncate">{bg.lightingStyle}</span>
               </div>
             </button>

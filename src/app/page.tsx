@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { ThemeProvider, useTheme } from '../lib/theme-context';
 import { Navbar } from '../components/navbar';
 import { Hero } from '../components/hero';
 import { BatchUploader } from '../components/uploader/batch-uploader';
@@ -19,12 +20,19 @@ import {
   GenerationConfig
 } from '../lib/types';
 import { BACKGROUND_PRESETS, HAIRSTYLE_PRESETS, OUTFIT_PRESETS } from '../lib/presets-data';
-import { Sparkles, Zap, ShieldCheck, Camera, Layers, CheckCircle2, History } from 'lucide-react';
+import { Camera, Zap, ShieldCheck, CheckCircle2, History, ArrowRight, Sparkles, Layers, Sliders } from 'lucide-react';
 
-export default function Home() {
+function StudioApp() {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+  const isTerracotta = theme === 'terracotta';
+
   // State management for 10-photo dataset & anchor selection
   const [photos, setPhotos] = useState<UploadedPhoto[]>([]);
   const [anchorPhotoId, setAnchorPhotoId] = useState<string>('');
+
+  // Active step wizard tracker for first-timers (1: Upload, 2: Crop, 3: Style Matrix, 4: Results)
+  const [activeStep, setActiveStep] = useState<number>(1);
 
   // State management for Crop Aspect Ratio
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('1:1');
@@ -60,12 +68,11 @@ export default function Home() {
     setProgress({
       stage: 'validating',
       percent: 15,
-      message: 'Validating Reference Photos & Facial Landmarks...',
+      message: 'Validating Reference Photos & Facial Feature Map...',
       stepDetails: `Processing ${photos.length} uploaded subject photos for facial feature extraction`
     });
 
     try {
-      // Step 2 Progress: Authenticity System Prompt Injector
       await new Promise((r) => setTimeout(r, 600));
       setProgress({
         stage: 'injecting',
@@ -74,7 +81,6 @@ export default function Home() {
         stepDetails: `Applying ${skinTone} undertones & authentic 4C hair texture rules`
       });
 
-      // Step 3 Progress: Lighting & Synthesizer
       await new Promise((r) => setTimeout(r, 800));
       setProgress({
         stage: 'generating',
@@ -114,6 +120,7 @@ export default function Home() {
       });
 
       setResults((prev) => [generatedData, ...prev]);
+      setActiveStep(4);
     } catch (err: any) {
       console.error(err);
       alert('Generation error. Please check your network or try again.');
@@ -123,7 +130,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
+    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${
+      isLight
+        ? 'bg-slate-50 text-slate-900 selection:bg-amber-400'
+        : isTerracotta
+        ? 'bg-[#FAF7F2] text-[#2D241E] selection:bg-[#C86D44] selection:text-white'
+        : 'bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950'
+    }`}>
       {/* Top Navbar */}
       <Navbar />
 
@@ -131,132 +144,219 @@ export default function Home() {
       <Hero />
 
       {/* Studio Workspace Application Section */}
-      <main id="studio" className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-10 space-y-12">
+      <main id="studio" className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-10 space-y-10">
         
-        {/* Workspace Title Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-6">
-          <div>
-            <div className="flex items-center space-x-2">
-              <Camera className="h-6 w-6 text-amber-400" />
-              <h2 className="text-2xl md:text-3xl font-extrabold text-white tracking-tight">
-                Headshot Creation Studio
-              </h2>
+        {/* First-Timers Guided Stepper Bar */}
+        <div className={`p-4 rounded-2xl border transition-colors ${
+          isLight
+            ? 'bg-white border-slate-200 shadow-sm'
+            : isTerracotta
+            ? 'bg-white border-[#E8DFD5] shadow-sm'
+            : 'bg-slate-900/80 border-slate-800'
+        }`}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-center text-xs font-bold">
+            <button
+              type="button"
+              onClick={() => setActiveStep(1)}
+              className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
+                activeStep === 1
+                  ? 'bg-amber-500 text-slate-950 shadow-md'
+                  : photos.length > 0
+                  ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
+                  : 'opacity-60 hover:opacity-100'
+              }`}
+            >
+              <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">1</span>
+              <span>1. Upload Photos</span>
+              {photos.length > 0 && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveStep(2)}
+              className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
+                activeStep === 2
+                  ? 'bg-amber-500 text-slate-950 shadow-md'
+                  : 'opacity-60 hover:opacity-100'
+              }`}
+            >
+              <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">2</span>
+              <span>2. Crop & Frame</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveStep(3)}
+              className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
+                activeStep === 3
+                  ? 'bg-amber-500 text-slate-950 shadow-md'
+                  : 'opacity-60 hover:opacity-100'
+              }`}
+            >
+              <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">3</span>
+              <span>3. Choose Styles</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveStep(4)}
+              className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
+                activeStep === 4
+                  ? 'bg-amber-500 text-slate-950 shadow-md'
+                  : results.length > 0
+                  ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
+                  : 'opacity-60 hover:opacity-100'
+              }`}
+            >
+              <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">4</span>
+              <span>4. Results Gallery</span>
+              {results.length > 0 && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Step 1 & Step 2 Panel: Photos Upload & Aspect Ratio Cropper */}
+        {(activeStep === 1 || activeStep === 2) && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+              <div className="lg:col-span-2">
+                <BatchUploader
+                  photos={photos}
+                  onPhotosChange={(newPhotos) => {
+                    setPhotos(newPhotos);
+                    if (newPhotos.length > 0 && activeStep === 1) {
+                      setActiveStep(2);
+                    }
+                  }}
+                  anchorPhotoId={anchorPhotoId}
+                  onAnchorChange={setAnchorPhotoId}
+                />
+              </div>
+
+              <div>
+                <ImageCropper
+                  imageUrl={anchorPhoto ? anchorPhoto.url : ''}
+                  selectedRatio={aspectRatio}
+                  onRatioChange={setAspectRatio}
+                />
+
+                <div className="mt-4 text-right">
+                  <button
+                    type="button"
+                    onClick={() => setActiveStep(3)}
+                    disabled={photos.length === 0}
+                    className="inline-flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition-all disabled:opacity-50"
+                  >
+                    <span>Next: Select Background & Styles</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
             </div>
-            <p className="text-slate-400 text-xs md:text-sm mt-1">
-              Follow the 2 simple steps below to generate studio-grade executive headshots.
-            </p>
           </div>
+        )}
 
-          <div className="flex items-center space-x-3 text-xs">
-            <span className="flex items-center space-x-1.5 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full text-slate-300">
-              <ShieldCheck className="h-4 w-4 text-emerald-400" />
-              <span>Identity Protection Active</span>
-            </span>
-          </div>
-        </div>
-
-        {/* Step 1: 10-Photo Batch Uploader & Aspect Ratio Cropper */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          <div className="lg:col-span-2">
-            <BatchUploader
-              photos={photos}
-              onPhotosChange={setPhotos}
-              anchorPhotoId={anchorPhotoId}
-              onAnchorChange={setAnchorPhotoId}
+        {/* Step 3 Panel: Selection Matrix Engine (50 Backgrounds, 11 Hairstyles, 6 Outfits) */}
+        {activeStep === 3 && (
+          <div className="space-y-6">
+            <SelectionMatrix
+              selectedBackground={selectedBackground}
+              onSelectBackground={setSelectedBackground}
+              selectedHairstyle={selectedHairstyle}
+              onSelectHairstyle={setSelectedHairstyle}
+              selectedOutfit={selectedOutfit}
+              onSelectOutfit={setSelectedOutfit}
+              skinTone={skinTone}
+              onSkinToneChange={setSkinTone}
             />
+
+            {/* Optional Custom Instructions */}
+            <div className={`border rounded-2xl p-5 space-y-2 ${
+              isLight ? 'bg-white border-slate-200' : isTerracotta ? 'bg-white border-[#E8DFD5]' : 'bg-slate-900/60 border-slate-800'
+            }`}>
+              <label className="text-xs font-bold opacity-90 block">
+                Optional Custom Prompt Instructions
+              </label>
+              <input
+                type="text"
+                placeholder="e.g. Add subtle executive silver rim glasses, Rembrandt soft window lighting..."
+                value={customInstructions}
+                onChange={(e) => setCustomInstructions(e.target.value)}
+                className={`w-full rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amber-500 border ${
+                  isLight ? 'bg-slate-50 border-slate-200 text-slate-900' : isTerracotta ? 'bg-[#FAF7F2] border-[#E8DFD5]' : 'bg-slate-950 border-slate-800 text-white'
+                }`}
+              />
+            </div>
+
+            {/* Primary Generation CTA Button */}
+            <div className="text-center pt-2">
+              <button
+                type="button"
+                onClick={handleGenerate}
+                disabled={isGenerating || photos.length === 0}
+                className="relative inline-flex items-center space-x-3 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-extrabold text-base md:text-lg px-10 py-4 rounded-2xl shadow-xl shadow-amber-500/25 transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              >
+                <Zap className="h-6 w-6 fill-slate-950" />
+                <span>
+                  {isGenerating
+                    ? 'Processing AI Pipeline...'
+                    : `Generate Studio Headshot (${photos.length} Photos Dataset)`}
+                </span>
+              </button>
+            </div>
           </div>
-
-          <div>
-            <ImageCropper
-              imageUrl={anchorPhoto ? anchorPhoto.url : ''}
-              selectedRatio={aspectRatio}
-              onRatioChange={setAspectRatio}
-            />
-          </div>
-        </div>
-
-        {/* Step 2: Preset Selection Matrix Engine */}
-        <SelectionMatrix
-          selectedBackground={selectedBackground}
-          onSelectBackground={setSelectedBackground}
-          selectedHairstyle={selectedHairstyle}
-          onSelectHairstyle={setSelectedHairstyle}
-          selectedOutfit={selectedOutfit}
-          onSelectOutfit={setSelectedOutfit}
-          skinTone={skinTone}
-          onSkinToneChange={setSkinTone}
-        />
-
-        {/* Optional Custom Prompt Override */}
-        <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-5 space-y-2">
-          <label className="text-xs font-bold text-slate-300 block">
-            Optional Custom Prompt Instructions
-          </label>
-          <input
-            type="text"
-            placeholder="e.g. Add subtle executive silver rim glasses, Rembrandt soft window lighting..."
-            value={customInstructions}
-            onChange={(e) => setCustomInstructions(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-amber-500"
-          />
-        </div>
-
-        {/* Primary Generation CTA Button */}
-        <div className="text-center pt-2">
-          <button
-            type="button"
-            onClick={handleGenerate}
-            disabled={isGenerating || photos.length === 0}
-            className="relative inline-flex items-center space-x-3 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-extrabold text-base md:text-lg px-10 py-4 rounded-2xl shadow-xl shadow-amber-500/25 transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-          >
-            <Zap className="h-6 w-6 fill-slate-950" />
-            <span>
-              {isGenerating
-                ? 'Processing AI Pipeline...'
-                : `Generate Studio Headshot (${photos.length} Photos Dataset)`}
-            </span>
-          </button>
-          {photos.length === 0 && (
-            <p className="text-xs text-amber-400/80 mt-2 font-medium">
-              * Upload at least 1 photo above to activate generation button.
-            </p>
-          )}
-        </div>
+        )}
 
         {/* Generation Queue Live Status */}
         {isGenerating && (
-          <div className="pt-6">
+          <div className="pt-4">
             <GenerationQueue progress={progress} />
           </div>
         )}
 
-        {/* Results Gallery Section */}
-        {results.length > 0 && (
-          <section className="pt-8 space-y-6 border-t border-slate-800">
+        {/* Step 4 / Gallery Panel: Results Gallery */}
+        {(activeStep === 4 || results.length > 0) && (
+          <section className="pt-6 space-y-6 border-t border-slate-200/40">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
-                <History className="h-5 w-5 text-amber-400" />
-                <h3 className="font-bold text-white text-xl">Generated Headshots Studio Gallery</h3>
-                <span className="bg-amber-500/20 text-amber-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                <History className="h-5 w-5 text-amber-500" />
+                <h3 className="font-bold text-xl">Generated Headshots Studio Gallery</h3>
+                <span className="bg-amber-500/20 text-amber-600 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-500/30">
                   {results.length} Headshots
                 </span>
               </div>
+
+              <button
+                type="button"
+                onClick={() => setActiveStep(3)}
+                className="text-xs font-semibold text-amber-500 hover:underline flex items-center space-x-1"
+              >
+                <span>+ Create Another Variant</span>
+              </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {results.map((res) => (
-                <ResultCard key={res.id} result={res} />
-              ))}
-            </div>
+            {results.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {results.map((res) => (
+                  <ResultCard key={res.id} result={res} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-12 opacity-60 text-sm">
+                No headshots generated yet. Click "3. Choose Styles" above and press Generate!
+              </div>
+            )}
           </section>
         )}
 
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-900 bg-slate-950 py-8 px-4 text-center text-xs text-slate-500">
+      <footer className={`border-t py-8 px-4 text-center text-xs opacity-75 transition-colors ${
+        isLight ? 'bg-white border-slate-200' : isTerracotta ? 'bg-[#FAF7F2] border-[#E8DFD5]' : 'bg-slate-950 border-slate-900'
+      }`}>
         <div className="max-w-7xl mx-auto space-y-2">
-          <p className="font-semibold text-slate-400">
+          <p className="font-semibold">
             AfriHeadshot Studio © 2026 • Tailored for African Executive & Professional Excellence
           </p>
           <p>
@@ -265,5 +365,13 @@ export default function Home() {
         </div>
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <ThemeProvider>
+      <StudioApp />
+    </ThemeProvider>
   );
 }

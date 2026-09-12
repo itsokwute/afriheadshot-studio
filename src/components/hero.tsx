@@ -1,71 +1,116 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, Shield, Award, Users, CheckCircle2, Sliders, ArrowRight } from 'lucide-react';
+import { Sparkles, CheckCircle2, ShieldCheck, Camera, ArrowRight } from 'lucide-react';
+import { useTheme } from '../lib/theme-context';
 
 export const Hero: React.FC = () => {
-  return (
-    <section className="relative overflow-hidden pt-12 pb-16 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-b border-slate-800/60">
-      {/* Ambient background glow circles */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-amber-500/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute top-1/3 left-1/4 w-[400px] h-[250px] bg-amber-700/10 blur-[100px] rounded-full pointer-events-none" />
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+  const isTerracotta = theme === 'terracotta';
 
+  return (
+    <section className={`relative overflow-hidden pt-10 pb-14 border-b transition-colors duration-300 ${
+      isLight
+        ? 'bg-gradient-to-b from-slate-100 via-white to-slate-50 border-slate-200 text-slate-900'
+        : isTerracotta
+        ? 'bg-gradient-to-b from-[#F4EBE2] via-[#FAF7F2] to-[#F4EBE2] border-[#E8DFD5] text-[#2D241E]'
+        : 'bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-slate-800/60 text-white'
+    }`}>
       <div className="max-w-7xl mx-auto px-4 lg:px-8 relative z-10">
         <div className="text-center max-w-3xl mx-auto space-y-6">
           
           {/* Tagline Badge */}
-          <div className="inline-flex items-center space-x-2 bg-amber-500/10 border border-amber-500/30 px-4 py-1.5 rounded-full">
-            <Sparkles className="h-4 w-4 text-amber-400" />
-            <span className="text-xs font-bold text-amber-300 tracking-wide uppercase">
-              Next-Gen AI Headshot Studio for African Leadership
-            </span>
+          <div className={`inline-flex items-center space-x-2 px-4 py-1.5 rounded-full border text-xs font-bold uppercase tracking-wide ${
+            isLight
+              ? 'bg-amber-100/80 border-amber-300 text-amber-900'
+              : isTerracotta
+              ? 'bg-[#EFE8DF] border-[#D6C4B4] text-[#A34B24]'
+              : 'bg-amber-500/10 border-amber-500/30 text-amber-300'
+          }`}>
+            <Sparkles className="h-4 w-4 text-amber-500" />
+            <span>Next-Gen AI Headshot Studio for African Leadership</span>
           </div>
 
           {/* Main Title */}
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white tracking-tight leading-tight">
+          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight">
             Authentic Studio Headshots for <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-amber-400 to-yellow-500">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-600 to-yellow-600">
               African Professionals
             </span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-slate-300 text-base md:text-lg leading-relaxed font-normal">
-            Upload up to <strong className="text-amber-400 font-semibold">10 reference photos</strong> of head & shoulders. Our proprietary System Prompt Injector strictly preserves your authentic facial structure, natural afro hair texture, and rich melanin skin tones without artificial skin lightening or European bias.
+          <p className={`text-base md:text-lg leading-relaxed font-normal ${
+            isLight ? 'text-slate-600' : isTerracotta ? 'text-[#615145]' : 'text-slate-300'
+          }`}>
+            Upload up to <strong className="font-semibold text-amber-600">10 reference photos</strong>. Our System Prompt Injector strictly preserves your authentic facial structure, natural afro hair texture, and rich melanin skin tones.
           </p>
 
           {/* Feature Highlights Grid */}
-          <div className="pt-4 grid grid-cols-2 md:grid-cols-4 gap-3 text-left">
-            <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-              <div className="flex items-center space-x-2 text-amber-400 mb-1">
+          <div className="pt-2 grid grid-cols-2 md:grid-cols-4 gap-3 text-left">
+            <div className={`p-3.5 rounded-xl border transition-colors ${
+              isLight
+                ? 'bg-white border-slate-200 shadow-sm'
+                : isTerracotta
+                ? 'bg-white border-[#E8DFD5] shadow-sm'
+                : 'bg-slate-900/80 border-slate-800'
+            }`}>
+              <div className="flex items-center space-x-2 text-amber-500 mb-1">
                 <CheckCircle2 className="h-4 w-4" />
-                <span className="font-bold text-sm text-white">50 Backgrounds</span>
+                <span className={`font-bold text-sm ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
+                  50 Backgrounds
+                </span>
               </div>
-              <p className="text-xs text-slate-400">Lagos skylines, Sandton hubs, terracotta & studio gradients</p>
+              <p className="text-xs opacity-75">Lagos skylines, Sandton hubs, terracotta & studio gradients</p>
             </div>
 
-            <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-              <div className="flex items-center space-x-2 text-amber-400 mb-1">
+            <div className={`p-3.5 rounded-xl border transition-colors ${
+              isLight
+                ? 'bg-white border-slate-200 shadow-sm'
+                : isTerracotta
+                ? 'bg-white border-[#E8DFD5] shadow-sm'
+                : 'bg-slate-900/80 border-slate-800'
+            }`}>
+              <div className="flex items-center space-x-2 text-amber-500 mb-1">
                 <CheckCircle2 className="h-4 w-4" />
-                <span className="font-bold text-sm text-white">11 African Hairstyles</span>
+                <span className={`font-bold text-sm ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
+                  11 Hairstyles
+                </span>
               </div>
-              <p className="text-xs text-slate-400">Low fades, 360 waves, locs, box braids & Senegalese twists</p>
+              <p className="text-xs opacity-75">Low fades, 360 waves, locs, box braids & Senegalese twists</p>
             </div>
 
-            <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-              <div className="flex items-center space-x-2 text-amber-400 mb-1">
+            <div className={`p-3.5 rounded-xl border transition-colors ${
+              isLight
+                ? 'bg-white border-slate-200 shadow-sm'
+                : isTerracotta
+                ? 'bg-white border-[#E8DFD5] shadow-sm'
+                : 'bg-slate-900/80 border-slate-800'
+            }`}>
+              <div className="flex items-center space-x-2 text-amber-500 mb-1">
                 <CheckCircle2 className="h-4 w-4" />
-                <span className="font-bold text-sm text-white">6 Formal Outfits</span>
+                <span className={`font-bold text-sm ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
+                  6 Formal Outfits
+                </span>
               </div>
-              <p className="text-xs text-slate-400">Senator suits, Agbada corporate fusion & bespoke navy blazers</p>
+              <p className="text-xs opacity-75">Senator suits, Agbada fusion & bespoke navy blazers</p>
             </div>
 
-            <div className="bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl">
-              <div className="flex items-center space-x-2 text-amber-400 mb-1">
+            <div className={`p-3.5 rounded-xl border transition-colors ${
+              isLight
+                ? 'bg-white border-slate-200 shadow-sm'
+                : isTerracotta
+                ? 'bg-white border-[#E8DFD5] shadow-sm'
+                : 'bg-slate-900/80 border-slate-800'
+            }`}>
+              <div className="flex items-center space-x-2 text-amber-500 mb-1">
                 <CheckCircle2 className="h-4 w-4" />
-                <span className="font-bold text-sm text-white">2048x2048 Export</span>
+                <span className={`font-bold text-sm ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
+                  2048x2048 Export
+                </span>
               </div>
-              <p className="text-xs text-slate-400">LinkedIn ready with 1:1 and 4:5 aspect ratio presets</p>
+              <p className="text-xs opacity-75">LinkedIn ready with 1:1 and 4:5 aspect ratio presets</p>
             </div>
           </div>
 

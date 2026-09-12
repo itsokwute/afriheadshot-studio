@@ -4,7 +4,8 @@ import React, { useRef, useState } from 'react';
 import { UploadedPhoto } from '../../lib/types';
 import { analyzePhotoQuality } from '../../lib/canvas-utils';
 import { PhotoCard } from './photo-card';
-import { Upload, Image as ImageIcon, CheckCircle2, AlertCircle, Sparkles, UserCheck, ShieldCheck } from 'lucide-react';
+import { Upload, CheckCircle2, Sparkles, UserCheck, Info } from 'lucide-react';
+import { useTheme } from '../../lib/theme-context';
 
 interface BatchUploaderProps {
   photos: UploadedPhoto[];
@@ -19,6 +20,10 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
   anchorPhotoId,
   onAnchorChange,
 }) => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+  const isTerracotta = theme === 'terracotta';
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -38,7 +43,6 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
 
       const url = URL.createObjectURL(file);
       const quality = await analyzePhotoQuality(url);
-
       const photoId = `photo-${Date.now()}-${Math.floor(Math.random() * 10000)}`;
 
       newUploadedPhotos.push({
@@ -89,10 +93,8 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
     onAnchorChange(id);
   };
 
-  // Sample photos loader for instant test-drive
   const handleLoadSampleDataset = async () => {
     setIsProcessing(true);
-    // Create 4 high-quality reference avatar sample photos for rapid testing
     const sampleUrls = [
       'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
       'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
@@ -132,29 +134,43 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
   return (
     <div className="space-y-6">
       {/* Header Banner */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900/80 border border-amber-900/30 p-4 rounded-2xl">
+      <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl border ${
+        isLight
+          ? 'bg-white border-slate-200 shadow-sm'
+          : isTerracotta
+          ? 'bg-white border-[#E8DFD5] shadow-sm'
+          : 'bg-slate-900/80 border-amber-900/30'
+      }`}>
         <div>
           <div className="flex items-center space-x-2">
-            <UserCheck className="h-5 w-5 text-amber-400" />
-            <h3 className="font-bold text-white text-base">Step 1: Upload Reference Photos</h3>
-            <span className="bg-amber-500/20 text-amber-300 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-500/30">
+            <UserCheck className="h-5 w-5 text-amber-500" />
+            <h3 className={`font-bold text-base ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
+              Step 1: Upload Reference Photos
+            </h3>
+            <span className="bg-amber-500/20 text-amber-600 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-500/30">
               {photos.length} / 10 Photos
             </span>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs opacity-75 mt-1">
             Supply up to 10 photos of head & shoulders where facial features are clearly visible for maximum identity accuracy.
           </p>
         </div>
 
-        {/* Quick sample dataset button */}
+        {/* Quick sample dataset button for first timers */}
         {photos.length < 10 && (
           <button
             type="button"
             onClick={handleLoadSampleDataset}
-            className="inline-flex items-center space-x-1.5 bg-slate-800 hover:bg-slate-700 text-amber-300 text-xs font-semibold px-3.5 py-2 rounded-xl border border-slate-700 transition-all self-start sm:self-auto shrink-0"
+            className={`inline-flex items-center space-x-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border transition-all self-start sm:self-auto shrink-0 ${
+              isLight
+                ? 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300'
+                : isTerracotta
+                ? 'bg-[#F4EBE2] hover:bg-[#EFE8DF] text-[#A34B24] border-[#E8DFD5]'
+                : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-slate-700'
+            }`}
           >
-            <Sparkles className="h-3.5 w-3.5 text-amber-400" />
-            <span>Load Sample Dataset</span>
+            <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+            <span>Try Demo Sample Photos</span>
           </button>
         )}
       </div>
@@ -172,6 +188,10 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
           className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all ${
             isHovering
               ? 'border-amber-500 bg-amber-500/10'
+              : isLight
+              ? 'border-slate-300 bg-slate-50/80 hover:border-amber-500 hover:bg-amber-50/30'
+              : isTerracotta
+              ? 'border-[#D6C4B4] bg-white hover:border-amber-600 hover:bg-[#FAF7F2]'
               : 'border-slate-800 bg-slate-950/60 hover:border-slate-700 hover:bg-slate-900/40'
           }`}
         >
@@ -185,29 +205,29 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
           />
 
           <div className="flex flex-col items-center space-y-3">
-            <div className="h-14 w-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <div className="h-14 w-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500">
               <Upload className="h-7 w-7" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-white">
+              <p className={`text-sm font-semibold ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
                 Drag & Drop 1 to 10 Head & Shoulder Photos
               </p>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs opacity-75 mt-1">
                 Supports PNG, JPG, or WEBP (Facial features clearly visible)
               </p>
             </div>
 
-            <div className="flex items-center space-x-3 text-xs text-slate-400 pt-2">
+            <div className="flex items-center space-x-3 text-xs opacity-75 pt-2">
               <div className="flex items-center space-x-1">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
                 <span>Good lighting</span>
               </div>
               <div className="flex items-center space-x-1">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
                 <span>Natural expression</span>
               </div>
               <div className="flex items-center space-x-1">
-                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
                 <span>Varied angles welcome</span>
               </div>
             </div>
@@ -215,12 +235,26 @@ export const BatchUploader: React.FC<BatchUploaderProps> = ({
         </div>
       )}
 
+      {/* First Timer Helper Banner */}
+      {photos.length === 0 && (
+        <div className={`p-3.5 rounded-xl border flex items-center space-x-3 text-xs ${
+          isLight
+            ? 'bg-amber-50 border-amber-200 text-amber-900'
+            : isTerracotta
+            ? 'bg-[#F4EBE2] border-[#E8DFD5] text-[#A34B24]'
+            : 'bg-amber-500/10 border-amber-500/20 text-amber-300'
+        }`}>
+          <Info className="h-4 w-4 shrink-0 text-amber-500" />
+          <span><strong>First time here?</strong> Click "Try Demo Sample Photos" above to instantly load test photos and try the headshot builder in seconds!</span>
+        </div>
+      )}
+
       {/* Uploaded Photos Grid */}
       {photos.length > 0 && (
         <div className="space-y-3">
-          <div className="flex items-center justify-between text-xs font-semibold text-slate-400 px-1">
+          <div className="flex items-center justify-between text-xs font-semibold opacity-80 px-1">
             <span>Uploaded Subject Photos ({photos.length})</span>
-            <span className="text-amber-400 font-normal">Click any photo to make it the Primary Crop Anchor</span>
+            <span className="text-amber-500 font-normal">Click any photo to make it the Primary Crop Anchor</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">

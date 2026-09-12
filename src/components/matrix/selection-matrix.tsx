@@ -5,7 +5,8 @@ import { BackgroundPreset, HairstylePreset, OutfitPreset } from '../../lib/types
 import { BackgroundPicker } from './background-picker';
 import { HairstylePicker } from './hairstyle-picker';
 import { OutfitPicker } from './outfit-picker';
-import { Building2, Scissors, Shirt, Sliders, ShieldCheck, Sparkles } from 'lucide-react';
+import { Building2, Scissors, Shirt, Sliders, ShieldCheck } from 'lucide-react';
+import { useTheme } from '../../lib/theme-context';
 
 interface SelectionMatrixProps {
   selectedBackground: BackgroundPreset;
@@ -30,6 +31,10 @@ export const SelectionMatrix: React.FC<SelectionMatrixProps> = ({
   skinTone,
   onSkinToneChange,
 }) => {
+  const { theme } = useTheme();
+  const isLight = theme === 'light';
+  const isTerracotta = theme === 'terracotta';
+
   const [activeTab, setActiveTab] = useState<MatrixTab>('backgrounds');
 
   const skinTones: ('Deep Ebony' | 'Rich Warm Cocoa' | 'Golden Bronze' | 'Natural Deep Brown')[] = [
@@ -40,23 +45,37 @@ export const SelectionMatrix: React.FC<SelectionMatrixProps> = ({
   ];
 
   return (
-    <div className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-6">
+    <div className={`border rounded-2xl p-6 space-y-6 transition-colors ${
+      isLight
+        ? 'bg-white border-slate-200 shadow-sm'
+        : isTerracotta
+        ? 'bg-white border-[#E8DFD5] shadow-sm'
+        : 'bg-slate-900/80 border-slate-800'
+    }`}>
       {/* Header & Melanin Tone Presets */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-slate-200/40 pb-5">
         <div>
           <div className="flex items-center space-x-2">
-            <Sliders className="h-5 w-5 text-amber-400" />
-            <h3 className="font-bold text-white text-base">Step 2: Selection Matrix & Style Facets</h3>
+            <Sliders className="h-5 w-5 text-amber-500" />
+            <h3 className={`font-bold text-base ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
+              Step 3: Selection Matrix & Style Facets
+            </h3>
           </div>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs opacity-75 mt-1">
             Customize background environments, African hairstyle textures, and formal attire.
           </p>
         </div>
 
         {/* Melanin Tone Selector */}
-        <div className="bg-slate-950 p-2 rounded-xl border border-slate-800 space-y-1.5">
-          <div className="flex items-center space-x-1.5 text-[11px] font-semibold text-slate-300">
-            <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />
+        <div className={`p-2 rounded-xl border space-y-1.5 ${
+          isLight
+            ? 'bg-slate-50 border-slate-200'
+            : isTerracotta
+            ? 'bg-[#FAF7F2] border-[#E8DFD5]'
+            : 'bg-slate-950 border-slate-800'
+        }`}>
+          <div className="flex items-center space-x-1.5 text-[11px] font-semibold opacity-80">
+            <ShieldCheck className="h-3.5 w-3.5 text-amber-500" />
             <span>Melanin Undertone Preserving Target</span>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
@@ -68,6 +87,10 @@ export const SelectionMatrix: React.FC<SelectionMatrixProps> = ({
                 className={`px-2.5 py-1 rounded-lg text-[11px] font-medium transition-all ${
                   skinTone === tone
                     ? 'bg-amber-500 text-slate-950 font-bold shadow-md'
+                    : isLight
+                    ? 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
+                    : isTerracotta
+                    ? 'bg-white text-[#2D241E] hover:bg-[#EFE8DF] border border-[#E8DFD5]'
                     : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'
                 }`}
               >
@@ -79,13 +102,17 @@ export const SelectionMatrix: React.FC<SelectionMatrixProps> = ({
       </div>
 
       {/* Facet Tabs Navigation */}
-      <div className="flex items-center space-x-2 border-b border-slate-800 pb-3">
+      <div className="flex items-center space-x-2 border-b border-slate-200/40 pb-3">
         <button
           type="button"
           onClick={() => setActiveTab('backgrounds')}
           className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'backgrounds'
-              ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+              ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+              : isLight
+              ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+              : isTerracotta
+              ? 'bg-[#F4EBE2] text-[#2D241E] hover:bg-[#EFE8DF] border border-[#E8DFD5]'
               : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -98,7 +125,11 @@ export const SelectionMatrix: React.FC<SelectionMatrixProps> = ({
           onClick={() => setActiveTab('hairstyles')}
           className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'hairstyles'
-              ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+              ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+              : isLight
+              ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+              : isTerracotta
+              ? 'bg-[#F4EBE2] text-[#2D241E] hover:bg-[#EFE8DF] border border-[#E8DFD5]'
               : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -111,7 +142,11 @@ export const SelectionMatrix: React.FC<SelectionMatrixProps> = ({
           onClick={() => setActiveTab('outfits')}
           className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
             activeTab === 'outfits'
-              ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
+              ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+              : isLight
+              ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+              : isTerracotta
+              ? 'bg-[#F4EBE2] text-[#2D241E] hover:bg-[#EFE8DF] border border-[#E8DFD5]'
               : 'bg-slate-950 text-slate-400 hover:text-white border border-slate-800'
           }`}
         >
@@ -145,18 +180,24 @@ export const SelectionMatrix: React.FC<SelectionMatrixProps> = ({
       </div>
 
       {/* Selection Matrix Summary Bar */}
-      <div className="bg-slate-950/80 border border-slate-800 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs">
+      <div className={`p-4 rounded-xl border flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs ${
+        isLight
+          ? 'bg-slate-50 border-slate-200 text-slate-800'
+          : isTerracotta
+          ? 'bg-[#FAF7F2] border-[#E8DFD5] text-[#2D241E]'
+          : 'bg-slate-950/80 border-slate-800 text-slate-300'
+      }`}>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-slate-400">Current Facet Selection:</span>
-          <span className="bg-amber-500/10 text-amber-300 px-2.5 py-1 rounded-lg border border-amber-500/20 font-semibold">
+          <span className="opacity-75">Current Facet Selection:</span>
+          <span className="bg-amber-500/10 text-amber-600 px-2.5 py-1 rounded-lg border border-amber-500/20 font-semibold">
             {selectedBackground.title}
           </span>
-          <span className="text-slate-600">•</span>
-          <span className="bg-amber-500/10 text-amber-300 px-2.5 py-1 rounded-lg border border-amber-500/20 font-semibold">
+          <span className="opacity-50">•</span>
+          <span className="bg-amber-500/10 text-amber-600 px-2.5 py-1 rounded-lg border border-amber-500/20 font-semibold">
             {selectedHairstyle.title}
           </span>
-          <span className="text-slate-600">•</span>
-          <span className="bg-amber-500/10 text-amber-300 px-2.5 py-1 rounded-lg border border-amber-500/20 font-semibold">
+          <span className="opacity-50">•</span>
+          <span className="bg-amber-500/10 text-amber-600 px-2.5 py-1 rounded-lg border border-amber-500/20 font-semibold">
             {selectedOutfit.title}
           </span>
         </div>
