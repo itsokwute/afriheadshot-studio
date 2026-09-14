@@ -16,20 +16,81 @@ interface PortraitEntry {
   label?: string;
 }
 
-// 8 real AI-generated Black & African professional portraits (hosted in /public)
-const PORTRAITS: PortraitEntry[] = [
-  { src: '/p-m1.png', alt: 'Black male executive – fade haircut, charcoal suit', label: 'Executive studio headshot', selfie: '/p-selfie.png' },
-  { src: '/p-f1.png', alt: 'Black female executive – locs, navy blazer', label: 'Corporate studio headshot', selfie: '/p-selfie.png' },
-  { src: '/p-m2.png', alt: 'Black male professional – 360 waves, navy suit', label: 'LinkedIn headshot', selfie: '/p-selfie.png' },
-  { src: '/p-f2.png', alt: 'Black African woman – box braids, white blazer', label: 'Women headshot', selfie: '/p-selfie.png' },
-  { src: '/p-m3.png', alt: 'Nigerian executive – senator attire, agbada', label: 'Heritage formal headshot', selfie: '/p-selfie.png' },
-  { src: '/p-f3.png', alt: 'Black African female doctor – white coat', label: 'Doctor headshot', selfie: '/p-selfie.png' },
-  { src: '/p-m4.png', alt: 'Black male lawyer – dreadlocks, black suit', label: 'Lawyer headshot', selfie: '/p-selfie.png' },
-  { src: '/p-m1.png', alt: 'Black CEO executive – fade haircut, boardroom', label: 'CEO headshot', selfie: '/p-selfie.png' },
+// ─── Curated high-fidelity Unsplash portrait URLs ──────────────────────────
+// Each entry is a genuine Black/African professional portrait.
+// Dimensions: 600×800 (portrait ratio) for the grid cells.
+const PORTRAIT_POOL: PortraitEntry[] = [
+  {
+    src: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black male executive – charcoal suit, confident gaze',
+    label: 'Executive studio headshot',
+    selfie: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=200&q=70',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black African woman – corporate blazer, natural hair',
+    label: 'Corporate headshot',
+    selfie: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=70',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black male professional – tailored navy suit',
+    label: 'LinkedIn headshot',
+    selfie: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=70',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black African woman – confident executive portrait',
+    label: 'Women headshot',
+    selfie: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=200&q=70',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black male CEO – executive blazer, authoritative posture',
+    label: 'CEO headshot',
+    selfie: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=70',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black male professional – white dress shirt, clean studio',
+    label: 'Studio headshot',
+    selfie: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&q=70',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black male executive – confident boardroom portrait',
+    label: 'Boardroom headshot',
+    selfie: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=70',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black African woman – elegant professional portrait',
+    label: 'Executive portrait',
+    selfie: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=70',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black male professional – crisp studio lighting, suit',
+    label: 'Corporate headshot',
+    selfie: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=70',
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80',
+    alt: 'Black African woman – bold executive portrait',
+    label: 'Executive headshot',
+    selfie: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=70',
+  },
 ];
 
-// Repeat enough times to fill a dense 5-row wall (40+ cells)
-const GRID_PORTRAITS: PortraitEntry[] = Array.from({ length: 5 }, () => PORTRAITS).flat();
+// Tile 40 cells (5 rows × 8 cols) by cycling through the pool
+const GRID_PORTRAITS: PortraitEntry[] = Array.from(
+  { length: 40 },
+  (_, i) => PORTRAIT_POOL[i % PORTRAIT_POOL.length]
+);
+
+// Selfie for the modal polaroid badge (casual/candid shot)
+const SELFIE_CASUAL =
+  'https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=300&q=75';
 
 export const Hero: React.FC<HeroProps> = ({ hoveredCategory }) => {
   const { theme } = useTheme();
@@ -38,7 +99,7 @@ export const Hero: React.FC<HeroProps> = ({ hoveredCategory }) => {
 
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedPortrait, setSelectedPortrait] = useState<PortraitEntry>(PORTRAITS[0]);
+  const [selectedPortrait, setSelectedPortrait] = useState<PortraitEntry>(PORTRAIT_POOL[0]);
 
   const handlePortraitClick = useCallback((portrait: PortraitEntry) => {
     setSelectedPortrait(portrait);
@@ -50,83 +111,80 @@ export const Hero: React.FC<HeroProps> = ({ hoveredCategory }) => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Dynamic headline based on hovered mega menu category
+  // ─── Dynamic headline keyed on hovered mega menu category ───────────────
   const renderHeadline = () => {
-    if (hoveredCategory === 'LinkedIn') {
-      return (
-        <>
-          Stunning{' '}
-          <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
-            LinkedIn headshots
-          </span>{' '}
-          that make you stand out
-        </>
-      );
+    switch (hoveredCategory) {
+      case 'LinkedIn':
+        return (
+          <>
+            Stunning{' '}
+            <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
+              LinkedIn headshots
+            </span>{' '}
+            that make you stand out
+          </>
+        );
+      case 'Corporate':
+        return (
+          <>
+            Incredible{' '}
+            <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
+              corporate headshots
+            </span>{' '}
+            that speak for you
+          </>
+        );
+      case 'CEO':
+      case 'Executive':
+        return (
+          <>
+            Amazing{' '}
+            <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
+              CEO headshots
+            </span>{' '}
+            that make you look one instantly
+          </>
+        );
+      case 'Medical':
+        return (
+          <>
+            Trusted{' '}
+            <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
+              doctor headshots
+            </span>{' '}
+            that inspire confidence
+          </>
+        );
+      case 'Legal':
+        return (
+          <>
+            Powerful{' '}
+            <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
+              lawyer headshots
+            </span>{' '}
+            that command the room
+          </>
+        );
+      case 'Heritage':
+        return (
+          <>
+            Regal{' '}
+            <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
+              heritage headshots
+            </span>{' '}
+            in senator suits &amp; ankara accents
+          </>
+        );
+      default:
+        return (
+          <>
+            Turn your selfies into{' '}
+            <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
+              professional headshots
+            </span>
+          </>
+        );
     }
-    if (hoveredCategory === 'Corporate') {
-      return (
-        <>
-          Incredible{' '}
-          <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
-            corporate headshots
-          </span>{' '}
-          that speak for you
-        </>
-      );
-    }
-    if (hoveredCategory === 'CEO' || hoveredCategory === 'Executive') {
-      return (
-        <>
-          Amazing{' '}
-          <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
-            CEO headshots
-          </span>{' '}
-          that make you look one instantly
-        </>
-      );
-    }
-    if (hoveredCategory === 'Medical') {
-      return (
-        <>
-          Trusted{' '}
-          <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
-            doctor headshots
-          </span>{' '}
-          that inspire confidence
-        </>
-      );
-    }
-    if (hoveredCategory === 'Legal') {
-      return (
-        <>
-          Powerful{' '}
-          <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
-            lawyer headshots
-          </span>{' '}
-          that command the room
-        </>
-      );
-    }
-    if (hoveredCategory === 'Heritage') {
-      return (
-        <>
-          Regal{' '}
-          <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
-            heritage headshots
-          </span>{' '}
-          in senator suits & ankara accents
-        </>
-      );
-    }
-    // Default
-    return (
-      <>
-        Turn your selfies into{' '}
-        <span className="text-blue-600 underline decoration-blue-400/40 underline-offset-4">
-          professional headshots
-        </span>
-      </>
-    );
   };
 
   return (
@@ -139,12 +197,12 @@ export const Hero: React.FC<HeroProps> = ({ hoveredCategory }) => {
             ? 'bg-[#FAF7F2] border-[#E8DFD5] text-[#2D241E]'
             : 'bg-slate-950 border-slate-900 text-white'
         }`}
-        style={{ minHeight: '560px' }}
+        style={{ minHeight: '580px' }}
       >
-        {/* ─── Dense 5-row portrait mosaic (absolutely positioned, fills full section) ─── */}
+        {/* ─── Dense 5-row × 8-col portrait mosaic ─────────────────────────── */}
         <div className="absolute inset-0 overflow-hidden pointer-events-auto select-none">
           <div
-            className="grid gap-1.5 transform -rotate-1 scale-[1.08] origin-center"
+            className="grid gap-1 transform -rotate-1 scale-[1.06] origin-center"
             style={{ gridTemplateColumns: 'repeat(8, minmax(0, 1fr))' }}
           >
             {GRID_PORTRAITS.map((portrait, i) => (
@@ -165,16 +223,16 @@ export const Hero: React.FC<HeroProps> = ({ hoveredCategory }) => {
                   draggable={false}
                 />
 
-                {/* Dark gradient scrim (always subtle, stronger on hover) */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+                {/* Gradient scrim — deeper on hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-50 group-hover:opacity-80 transition-opacity duration-300" />
 
-                {/* "Click to view" hover pill — centered */}
+                {/* "Click to view" pill — visible on hover */}
                 <div
                   className={`absolute inset-0 flex items-center justify-center transition-all duration-200 ${
                     hoveredIdx === i ? 'opacity-100' : 'opacity-0'
                   }`}
                 >
-                  <span className="bg-white text-slate-900 font-bold text-[10px] sm:text-xs px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg border border-slate-200 whitespace-nowrap backdrop-blur-sm">
+                  <span className="bg-white text-slate-900 font-bold text-[9px] sm:text-xs px-2 sm:px-3 py-1 sm:py-1.5 rounded-full shadow-lg border border-slate-200 whitespace-nowrap backdrop-blur-sm">
                     Click to view
                   </span>
                 </div>
@@ -183,18 +241,18 @@ export const Hero: React.FC<HeroProps> = ({ hoveredCategory }) => {
           </div>
         </div>
 
-        {/* ─── Overlay scrim so card text is legible over the mosaic ─── */}
+        {/* ─── Scrim over mosaic so card text is legible ──────────────────── */}
         <div
           className={`absolute inset-0 z-10 pointer-events-none ${
             isLight
-              ? 'bg-slate-50/70'
+              ? 'bg-slate-50/72'
               : isTerracotta
-              ? 'bg-[#FAF7F2]/70'
-              : 'bg-slate-950/75'
+              ? 'bg-[#FAF7F2]/72'
+              : 'bg-slate-950/76'
           } backdrop-blur-[1px]`}
         />
 
-        {/* ─── Floating Centered White Hero Card ─── */}
+        {/* ─── Floating Centered Hero Card ────────────────────────────────── */}
         <div className="relative z-20 flex items-center justify-center px-4 py-16 sm:py-20 lg:py-24 pointer-events-none">
           <div
             className={`max-w-lg w-full text-center p-8 sm:p-10 rounded-2xl border shadow-2xl transition-all duration-300 pointer-events-auto ${
@@ -215,10 +273,10 @@ export const Hero: React.FC<HeroProps> = ({ hoveredCategory }) => {
               <span>Rated 4.9/5 with 16,865+ reviews on Trustpilot</span>
             </div>
 
-            {/* Dynamic Headline */}
+            {/* Dynamic Headline — min-height prevents layout jump on swap */}
             <h1
-              className="text-3xl sm:text-4xl md:text-[2.6rem] font-extrabold tracking-tight leading-[1.15] mb-4 transition-all duration-300"
-              style={{ minHeight: '7.5rem' }}
+              className="text-3xl sm:text-4xl md:text-[2.55rem] font-extrabold tracking-tight leading-[1.15] mb-4 transition-all duration-300"
+              style={{ minHeight: '7rem' }}
             >
               {renderHeadline()}
             </h1>
@@ -236,7 +294,7 @@ export const Hero: React.FC<HeroProps> = ({ hoveredCategory }) => {
               Free high-res preview. Download only when you love them.
             </p>
 
-            {/* Primary CTA Button */}
+            {/* Primary CTA */}
             <button
               type="button"
               onClick={handleScrollToStudio}
@@ -248,12 +306,12 @@ export const Hero: React.FC<HeroProps> = ({ hoveredCategory }) => {
         </div>
       </section>
 
-      {/* ─── Click-to-View Conversion Modal ─── */}
+      {/* ─── Click-to-View Modal ─────────────────────────────────────────── */}
       <ClickToViewModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        portraitUrl={selectedPortrait.src}
-        selfieUrl={selectedPortrait.selfie || '/p-selfie.png'}
+        portraitUrl={selectedPortrait.src.replace('w=600', 'w=900')}
+        selfieUrl={SELFIE_CASUAL}
         title={selectedPortrait.label}
       />
     </>

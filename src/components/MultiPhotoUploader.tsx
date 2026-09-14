@@ -187,7 +187,7 @@ export const MultiPhotoUploader: React.FC<MultiPhotoUploaderProps> = ({
           <div className="flex items-center space-x-2">
             <UserCheck className="h-5 w-5 text-amber-500" />
             <h3 className={`font-bold text-base ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
-              Upload Subject Reference Photos
+              Upload subject reference photos
             </h3>
             {/* Counter Chip explicitly matching requirement: "3/10 Photos Loaded (Optimal: 4+)" */}
             <span className="bg-amber-500/20 text-amber-600 text-xs font-bold px-3 py-1 rounded-full border border-amber-500/30">
@@ -213,7 +213,7 @@ export const MultiPhotoUploader: React.FC<MultiPhotoUploaderProps> = ({
             }`}
           >
             <Camera className="h-3.5 w-3.5 text-amber-500" />
-            <span>View Photo Guidelines</span>
+            <span>View photo guidelines</span>
           </button>
 
           {photos.length < 10 && (
@@ -230,7 +230,7 @@ export const MultiPhotoUploader: React.FC<MultiPhotoUploaderProps> = ({
               } disabled:opacity-50`}
             >
               <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-              <span>{isProcessing ? 'Processing...' : 'Try Demo Sample Photos'}</span>
+              <span>{isProcessing ? 'Processing...' : 'Try demo sample photos'}</span>
             </button>
           )}
         </div>

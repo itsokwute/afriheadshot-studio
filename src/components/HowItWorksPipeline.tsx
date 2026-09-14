@@ -9,31 +9,39 @@ export const HowItWorksPipeline: React.FC = () => {
   const isLight = theme === 'light';
   const isTerracotta = theme === 'terracotta';
 
-  // 4 Casual Selfies of a Black Professional
+  // 4 Casual selfie inputs — varied Black African professionals (frontal, 3/4, candid)
   const inputSelfies = [
-    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
+    // Black male — casual white t-shirt, relaxed candid
+    'https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=300&q=80',
+    // Black female — natural hair, indoor window light
     'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80',
+    // Black male — relaxed 3/4 angle, soft background
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
+    // Black female — slight tilt, warm natural lighting
     'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=300&q=80'
   ];
 
-  // 4 Polished Executive Output Portraits of Black Professionals
+  // 4 Polished AI-generated executive output portraits — Black professionals
   const aiOutputs = [
     {
-      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
-      title: 'Executive office'
+      // Black male executive — sharp fade, charcoal boardroom suit
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80',
+      title: 'CEO executive'
     },
     {
+      // Black female executive — blazer, confident power pose
       image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
-      title: 'Senator formal'
+      title: 'Corporate executive'
     },
     {
-      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
-      title: 'Corporate glass'
-    },
-    {
-      image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=400&q=80',
+      // Black male professional — navy suit, studio gradient background
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
       title: 'Studio gradient'
+    },
+    {
+      // Black African woman — senator formal attire, regal portrait
+      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
+      title: 'Senator formal'
     }
   ];
 

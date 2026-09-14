@@ -34,7 +34,7 @@ export const ImageCropper: React.FC<ImageCropperProps> = ({
         <div className="flex items-center space-x-2">
           <Crop className="h-5 w-5 text-amber-500" />
           <h4 className={`font-bold text-sm ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
-            LinkedIn Framing & Aspect Ratio
+            LinkedIn framing and aspect ratio
           </h4>
         </div>
 

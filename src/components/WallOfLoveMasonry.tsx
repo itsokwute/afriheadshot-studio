@@ -12,9 +12,10 @@ export const WallOfLoveMasonry: React.FC = () => {
   const reviews = [
     {
       type: 'photo-card',
-      image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-      quote: 'My curls were perfectly portrayed — I could not believe it.',
-      author: 'Carroll D.',
+      // Black female professional — natural hair, bold confident gaze
+      image: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=600&q=80',
+      quote: 'My locs and skin tone were perfectly captured — it looked like a $2,000 studio shoot.',
+      author: 'Amara D.',
       role: 'Product Lead, Lagos'
     },
     {
@@ -27,8 +28,9 @@ export const WallOfLoveMasonry: React.FC = () => {
     },
     {
       type: 'photo-card',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
-      quote: 'Amazing! Several colleagues reached out asking which studio I visited.',
+      // Black male professional — tailored suit, sharp studio lighting
+      image: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?auto=format&fit=crop&w=600&q=80',
+      quote: 'Several colleagues reached out asking which studio I visited. I told them it was AI.',
       author: 'Richard P.',
       role: 'Tech Founder, Johannesburg'
     },
@@ -42,16 +44,33 @@ export const WallOfLoveMasonry: React.FC = () => {
     },
     {
       type: 'photo-card',
+      // Black African woman — corporate blazer, natural hair
       image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
-      quote: 'The melanin skin tones and box braids look astonishingly authentic.',
+      quote: 'The melanin tone and box braids look astonishingly authentic in every variation.',
       author: 'Zainab M.',
       role: 'Design Director, Kigali'
     },
     {
       type: 'quote-card',
-      quote: 'Saved $400 on a physical photoshoot. The Senator suit and lighting options are immaculate.',
+      quote: 'Saved $400 on a physical photoshoot. The senator suit and lighting options are immaculate.',
       author: 'Tunde A.',
       role: 'Finance Manager, Abuja',
+      stars: 5,
+      verified: true
+    },
+    {
+      type: 'photo-card',
+      // Black male executive — navy blazer, confident boardroom framing
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
+      quote: 'Landed my CEO role partly because of how commanding my new headshot looks on LinkedIn.',
+      author: 'Emeka N.',
+      role: 'Chief Executive Officer, Accra'
+    },
+    {
+      type: 'quote-card',
+      quote: 'The 360 waves and dark skin tone were preserved perfectly. No whitewashing whatsoever.',
+      author: 'Kofi A.',
+      role: 'Software Engineer, London',
       stars: 5,
       verified: true
     }
