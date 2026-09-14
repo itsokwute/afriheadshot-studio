@@ -86,7 +86,7 @@ export const BackgroundPicker: React.FC<BackgroundPickerProps> = ({
       </div>
 
       {/* Background Presets Grid (50 Options) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 max-h-[520px] overflow-y-auto pr-1">
+      <div className="flex md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 max-h-[520px] overflow-x-auto snap-x md:overflow-y-auto pb-2 pr-1 no-scrollbar">
         {filteredPresets.map((bg) => {
           const isSelected = selectedBackground.id === bg.id;
           return (
@@ -94,7 +94,7 @@ export const BackgroundPicker: React.FC<BackgroundPickerProps> = ({
               key={bg.id}
               type="button"
               onClick={() => onSelectBackground(bg)}
-              className={`relative text-left p-4 rounded-2xl border transition-all flex flex-col justify-between group overflow-hidden ${
+              className={`relative text-left p-4 rounded-2xl border transition-all flex flex-col justify-between group overflow-hidden snap-start shrink-0 w-[280px] md:w-auto md:shrink ${
                 isSelected
                   ? 'border-amber-500 bg-amber-500/10 shadow-md ring-2 ring-amber-500/40'
                   : isLight

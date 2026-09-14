@@ -9,6 +9,7 @@ import { ImageCropper } from '../components/uploader/image-cropper';
 import { SelectionMatrix } from '../components/matrix/selection-matrix';
 import { GenerationQueue } from '../components/generation/generation-queue';
 import { ResultCard } from '../components/generation/result-card';
+import { ImageLightboxModal } from '../components/ImageLightboxModal';
 import {
   UploadedPhoto,
   AspectRatio,
@@ -20,7 +21,7 @@ import {
   GenerationConfig
 } from '../lib/types';
 import { BACKGROUND_PRESETS, HAIRSTYLE_PRESETS, OUTFIT_PRESETS } from '../lib/presets-data';
-import { Camera, Zap, ShieldCheck, CheckCircle2, History, ArrowRight, Sparkles, Layers, Sliders, Square, Circle } from 'lucide-react';
+import { UserCheck, Zap, CheckCircle2, History, ArrowRight, Square, Circle } from 'lucide-react';
 
 function StudioApp() {
   const { theme } = useTheme();
@@ -31,8 +32,11 @@ function StudioApp() {
   const [photos, setPhotos] = useState<UploadedPhoto[]>([]);
   const [anchorPhotoId, setAnchorPhotoId] = useState<string>('');
 
-  // Active step wizard tracker for first-timers (1: Upload, 2: Crop, 3: Style Matrix, 4: Results)
+  // Active step wizard tracker (1: Upload, 2: Crop, 3: Style Matrix, 4: Results)
   const [activeStep, setActiveStep] = useState<number>(1);
+
+  // Lightbox modal index state
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Global LinkedIn avatar circle preview toggle state in gallery view
   const [globalCirclePreview, setGlobalCirclePreview] = useState<boolean>(false);
@@ -133,6 +137,7 @@ function StudioApp() {
           backgroundTitle: resData.metadata?.backgroundTitle || selectedBackground.title,
           hairstyleTitle: resData.metadata?.hairstyleTitle || selectedHairstyle.title,
           outfitTitle: resData.metadata?.outfitTitle || selectedOutfit.title,
+          metadata: resData.metadata,
           seed: Math.floor(Math.random() * 9000000) + 1000000,
           photoReferenceCount: photos.length
         }));
@@ -157,7 +162,7 @@ function StudioApp() {
   };
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-300 ${
+    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-300 pb-20 md:pb-0 ${
       isLight
         ? 'bg-slate-50 text-slate-900 selection:bg-amber-400'
         : isTerracotta
@@ -167,13 +172,13 @@ function StudioApp() {
       {/* Top Navbar */}
       <Navbar />
 
-      {/* Hero Showcase Section */}
-      <Hero />
+      {/* Hero Showcase Section - Auto-collapses on Step 4 (Results Gallery) */}
+      {activeStep !== 4 && <Hero />}
 
       {/* Studio Workspace Application Section */}
       <main id="studio" className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-10 space-y-10">
         
-        {/* First-Timers Guided Stepper Bar */}
+        {/* First-Timers Guided Stepper Bar with Enhanced Light/Terracotta Contrast */}
         <div className={`p-4 rounded-2xl border transition-colors ${
           isLight
             ? 'bg-white border-slate-200 shadow-sm'
@@ -187,10 +192,18 @@ function StudioApp() {
               onClick={() => setActiveStep(1)}
               className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
                 activeStep === 1
-                  ? 'bg-amber-500 text-slate-950 shadow-md'
+                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
                   : photos.length > 0
-                  ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
-                  : 'opacity-60 hover:opacity-100'
+                  ? isLight
+                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+                    : isTerracotta
+                    ? 'bg-[#EBF5ED] text-[#1E562F] border border-[#B3DDC0]'
+                    : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                  : isLight
+                  ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+                  : isTerracotta
+                  ? 'bg-[#F4EBE2] text-[#2D241E] hover:bg-[#EFE8DF] border border-[#E8DFD5]'
+                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 border border-slate-700'
               }`}
             >
               <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">1</span>
@@ -203,8 +216,12 @@ function StudioApp() {
               onClick={() => setActiveStep(2)}
               className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
                 activeStep === 2
-                  ? 'bg-amber-500 text-slate-950 shadow-md'
-                  : 'opacity-60 hover:opacity-100'
+                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+                  : isLight
+                  ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+                  : isTerracotta
+                  ? 'bg-[#F4EBE2] text-[#2D241E] hover:bg-[#EFE8DF] border border-[#E8DFD5]'
+                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 border border-slate-700'
               }`}
             >
               <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">2</span>
@@ -216,8 +233,12 @@ function StudioApp() {
               onClick={() => setActiveStep(3)}
               className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
                 activeStep === 3
-                  ? 'bg-amber-500 text-slate-950 shadow-md'
-                  : 'opacity-60 hover:opacity-100'
+                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+                  : isLight
+                  ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+                  : isTerracotta
+                  ? 'bg-[#F4EBE2] text-[#2D241E] hover:bg-[#EFE8DF] border border-[#E8DFD5]'
+                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 border border-slate-700'
               }`}
             >
               <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">3</span>
@@ -229,10 +250,18 @@ function StudioApp() {
               onClick={() => setActiveStep(4)}
               className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
                 activeStep === 4
-                  ? 'bg-amber-500 text-slate-950 shadow-md'
+                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
                   : results.length > 0
-                  ? 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
-                  : 'opacity-60 hover:opacity-100'
+                  ? isLight
+                    ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
+                    : isTerracotta
+                    ? 'bg-[#EBF5ED] text-[#1E562F] border border-[#B3DDC0]'
+                    : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                  : isLight
+                  ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
+                  : isTerracotta
+                  ? 'bg-[#F4EBE2] text-[#2D241E] hover:bg-[#EFE8DF] border border-[#E8DFD5]'
+                  : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 border border-slate-700'
               }`}
             >
               <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">4</span>
@@ -283,7 +312,7 @@ function StudioApp() {
           </div>
         )}
 
-        {/* Step 3 Panel: Selection Matrix Engine (50 Backgrounds, 11 Hairstyles, 6 Outfits) */}
+        {/* Step 3 Panel: Selection Matrix Engine */}
         {activeStep === 3 && (
           <div className="space-y-6">
             <SelectionMatrix
@@ -392,8 +421,13 @@ function StudioApp() {
 
             {results.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {results.map((res) => (
-                  <ResultCard key={res.id} result={res} globalCirclePreview={globalCirclePreview} />
+                {results.map((res, idx) => (
+                  <ResultCard
+                    key={res.id}
+                    result={res}
+                    globalCirclePreview={globalCirclePreview}
+                    onOpenLightbox={() => setLightboxIndex(idx)}
+                  />
                 ))}
               </div>
             ) : (
@@ -405,6 +439,56 @@ function StudioApp() {
         )}
 
       </main>
+
+      {/* Fixed Safe-Area Padded Bottom Bar for Mobile Screen CTA */}
+      <div className={`md:hidden fixed bottom-0 left-0 right-0 p-4 border-t z-40 flex items-center justify-between shadow-2xl backdrop-blur ${
+        isLight
+          ? 'bg-white/95 border-slate-200 text-slate-900'
+          : isTerracotta
+          ? 'bg-[#FAF7F2]/95 border-[#E8DFD5] text-[#2D241E]'
+          : 'bg-slate-950/95 border-slate-800 text-white'
+      }`}>
+        <div className="text-xs">
+          <p className="font-bold">{photos.length} Photos Loaded</p>
+          <p className="text-[10px] text-amber-500 font-medium truncate max-w-[140px]">
+            {selectedBackground.title}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={() => {
+            if (activeStep < 3) {
+              setActiveStep(3);
+            } else {
+              handleGenerate();
+            }
+          }}
+          disabled={isGenerating || (activeStep === 3 && photos.length === 0)}
+          className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg flex items-center space-x-2 disabled:opacity-50"
+        >
+          <Zap className="h-4 w-4 fill-slate-950" />
+          <span>
+            {isGenerating
+              ? 'Generating...'
+              : activeStep < 3
+              ? 'Continue to Styles'
+              : 'Generate Headshots'}
+          </span>
+        </button>
+      </div>
+
+      {/* Fullscreen Image Lightbox Overlay Modal */}
+      {lightboxIndex !== null && results.length > 0 && (
+        <ImageLightboxModal
+          results={results}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onReroll={() => {
+            setLightboxIndex(null);
+            handleGenerate();
+          }}
+        />
+      )}
 
       {/* Footer */}
       <footer className={`border-t py-8 px-4 text-center text-xs opacity-75 transition-colors ${

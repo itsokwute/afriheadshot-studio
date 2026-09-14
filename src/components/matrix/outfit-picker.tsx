@@ -28,7 +28,7 @@ export const OutfitPicker: React.FC<OutfitPickerProps> = ({
         </h4>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
+      <div className="flex md:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 overflow-x-auto snap-x pb-2 no-scrollbar">
         {OUTFIT_PRESETS.map((outfit) => {
           const isSelected = selectedOutfit.id === outfit.id;
           return (
@@ -36,7 +36,7 @@ export const OutfitPicker: React.FC<OutfitPickerProps> = ({
               key={outfit.id}
               type="button"
               onClick={() => onSelectOutfit(outfit)}
-              className={`relative text-left p-4 rounded-2xl border transition-all flex flex-col justify-between group ${
+              className={`relative text-left p-4 rounded-2xl border transition-all flex flex-col justify-between group snap-start shrink-0 w-[260px] md:w-auto md:shrink ${
                 isSelected
                   ? 'border-amber-500 bg-amber-500/10 shadow-md ring-2 ring-amber-500/40'
                   : isLight

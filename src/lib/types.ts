@@ -83,6 +83,11 @@ export interface GeneratedResult {
   backgroundTitle: string;
   hairstyleTitle: string;
   outfitTitle: string;
+  metadata?: {
+    backgroundTitle?: string;
+    hairstyleTitle?: string;
+    outfitTitle?: string;
+  };
   seed: number;
   photoReferenceCount: number;
 }

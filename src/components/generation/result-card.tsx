@@ -11,9 +11,14 @@ import { useTheme } from '../../lib/theme-context';
 interface ResultCardProps {
   result: GeneratedResult;
   globalCirclePreview?: boolean;
+  onOpenLightbox?: (result: GeneratedResult) => void;
 }
 
-export const ResultCard: React.FC<ResultCardProps> = ({ result, globalCirclePreview = false }) => {
+export const ResultCard: React.FC<ResultCardProps> = ({
+  result,
+  globalCirclePreview = false,
+  onOpenLightbox,
+}) => {
   const { theme } = useTheme();
   const isLight = theme === 'light';
   const isTerracotta = theme === 'terracotta';
@@ -23,9 +28,11 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, globalCirclePrev
   const [showComparison, setShowComparison] = useState(false);
   const [isCirclePreview, setIsCirclePreview] = useState(globalCirclePreview);
 
-  // Clean metadata formatting without stray trailing punctuation
-  const title = result.backgroundTitle || "Executive Office";
-  const subtitleParts = [result.hairstyleTitle, result.outfitTitle].filter(Boolean);
+  // Clean metadata formatting without stray trailing punctuation or dangling dots
+  const title = result.metadata?.backgroundTitle || result.backgroundTitle || "Executive Office";
+  const hairTitle = result.metadata?.hairstyleTitle || result.hairstyleTitle || "";
+  const outfitTitle = result.metadata?.outfitTitle || result.outfitTitle || "";
+  const subtitleParts = [hairTitle, outfitTitle].map(s => s.trim()).filter(Boolean);
   const subtitle = subtitleParts.length > 0 ? subtitleParts.join(" • ") : "";
 
   return (
@@ -86,9 +93,13 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result, globalCirclePrev
             </button>
           </div>
         ) : (
-          <div className={`relative w-full flex items-center justify-center p-1 ${
-            result.aspectRatio === '1:1' ? 'aspect-square' : 'aspect-[4/5]'
-          }`}>
+          <div
+            onClick={() => onOpenLightbox && onOpenLightbox(result)}
+            className={`relative w-full flex items-center justify-center p-1 cursor-pointer ${
+              result.aspectRatio === '1:1' ? 'aspect-square' : 'aspect-[4/5]'
+            }`}
+            title="Click to view full-screen lightbox"
+          >
             <div className={`relative w-full h-full transition-all duration-300 overflow-hidden ${
               isCirclePreview
                 ? 'rounded-full aspect-square max-w-[85%] max-h-[85%] mx-auto border-4 border-amber-500/80 shadow-2xl'
