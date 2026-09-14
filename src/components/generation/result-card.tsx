@@ -22,19 +22,17 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
   const [showComparison, setShowComparison] = useState(false);
 
   return (
-    <div className={`border rounded-2xl overflow-hidden shadow-md transition-all flex flex-col justify-between group ${
+    <div className={`border rounded-2xl overflow-hidden shadow-lg transition-all flex flex-col justify-between group ${
       isLight
         ? 'bg-white border-slate-200 hover:border-slate-300'
         : isTerracotta
         ? 'bg-white border-[#E8DFD5] hover:border-[#D6C4B4]'
         : 'bg-slate-900/90 border-slate-800 hover:border-slate-700'
     }`}>
-      {/* Visual Header Image or Interactive Comparison */}
-      <div className={`relative w-full p-2 ${
-        isLight ? 'bg-slate-100' : isTerracotta ? 'bg-[#FAF7F2]' : 'bg-slate-950'
-      }`}>
+      {/* Visual Header Image - Full Bleed Card Framing */}
+      <div className="relative w-full overflow-hidden rounded-t-2xl">
         {showComparison ? (
-          <div className="p-2">
+          <div className="p-2 bg-slate-950">
             <ComparisonSlider
               originalUrl={result.originalAnchorUrl}
               generatedUrl={result.imageUrl}
@@ -43,13 +41,13 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
             <button
               type="button"
               onClick={() => setShowComparison(false)}
-              className="mt-2 w-full py-1 text-xs text-slate-500 hover:text-slate-800 bg-slate-200/80 rounded-lg text-center"
+              className="mt-2 w-full py-1 text-xs text-slate-400 hover:text-white bg-slate-900 rounded-lg text-center"
             >
               Close Comparison View
             </button>
           </div>
         ) : (
-          <div className={`relative w-full rounded-xl overflow-hidden ${
+          <div className={`relative w-full ${
             result.aspectRatio === '1:1' ? 'aspect-square' : 'aspect-[4/5]'
           }`}>
             <img
