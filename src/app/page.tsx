@@ -41,6 +41,9 @@ function StudioApp() {
   // Active step wizard tracker (1: Upload, 2: Crop, 3: Style Matrix, 4: Results)
   const [activeStep, setActiveStep] = useState<number>(1);
 
+  // Hovered mega menu category — wired from Navbar → Hero for dynamic headline
+  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+
   // Lightbox modal index state
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
@@ -193,10 +196,16 @@ function StudioApp() {
         : 'bg-slate-950 text-slate-100 selection:bg-amber-500 selection:text-slate-950'
     }`}>
       {/* Top Navbar */}
-      <Navbar />
+      <Navbar
+        onHoverCategory={setHoveredCategory}
+        onSelectCategory={(key) => {
+          // Could map category key to a background preset; for now just scroll
+          setActiveStep(1);
+        }}
+      />
 
       {/* Hero Showcase Section - Elevated Centered Card over 5-Row Photo Collage */}
-      {activeStep !== 4 && <Hero />}
+      {activeStep !== 4 && <Hero hoveredCategory={hoveredCategory} />}
 
       {/* Enterprise Corporate Social Proof Logo Marquee */}
       {activeStep !== 4 && <EnterpriseLogoStrip />}
