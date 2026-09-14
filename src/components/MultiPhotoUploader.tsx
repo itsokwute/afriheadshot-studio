@@ -3,8 +3,9 @@
 import React, { useRef, useState } from 'react';
 import { UploadedPhoto } from '../lib/types';
 import { analyzePhotoQuality } from '../lib/canvas-utils';
-import { Upload, Star, Trash2, CheckCircle2, Sparkles, UserCheck, Info } from 'lucide-react';
+import { Upload, Star, Trash2, CheckCircle2, Sparkles, UserCheck, Info, Camera } from 'lucide-react';
 import { useTheme } from '../lib/theme-context';
+import { PhotoGuidelinesModal } from './uploader/PhotoGuidelinesModal';
 
 export interface MultiPhotoUploaderProps {
   photos: UploadedPhoto[];
@@ -62,6 +63,7 @@ export const MultiPhotoUploader: React.FC<MultiPhotoUploaderProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [isGuidelinesOpen, setIsGuidelinesOpen] = useState(false);
 
   const handleFiles = async (files: FileList | File[]) => {
     if (!files || files.length === 0) return;
@@ -197,24 +199,41 @@ export const MultiPhotoUploader: React.FC<MultiPhotoUploaderProps> = ({
           </p>
         </div>
 
-        {/* Demo sample dataset button */}
-        {photos.length < 10 && (
+        {/* Action Buttons: Photo Guidelines & Demo Dataset */}
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto shrink-0">
           <button
             type="button"
-            onClick={handleLoadSampleDataset}
-            disabled={isProcessing}
-            className={`inline-flex items-center space-x-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border transition-all self-start sm:self-auto shrink-0 ${
+            onClick={() => setIsGuidelinesOpen(true)}
+            className={`inline-flex items-center space-x-1.5 text-xs font-semibold px-3 py-2 rounded-xl border transition-all ${
               isLight
-                ? 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300'
+                ? 'bg-slate-100 hover:bg-slate-200 text-slate-800 border-slate-300'
                 : isTerracotta
-                ? 'bg-[#F4EBE2] hover:bg-[#EFE8DF] text-[#A34B24] border-[#E8DFD5]'
-                : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-slate-700'
-            } disabled:opacity-50`}
+                ? 'bg-[#F4EBE2] hover:bg-[#EFE8DF] text-[#2D241E] border-[#E8DFD5]'
+                : 'bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700'
+            }`}
           >
-            <Sparkles className="h-3.5 w-3.5 text-amber-500" />
-            <span>{isProcessing ? 'Processing...' : 'Try Demo Sample Photos'}</span>
+            <Camera className="h-3.5 w-3.5 text-amber-500" />
+            <span>View Photo Guidelines</span>
           </button>
-        )}
+
+          {photos.length < 10 && (
+            <button
+              type="button"
+              onClick={handleLoadSampleDataset}
+              disabled={isProcessing}
+              className={`inline-flex items-center space-x-1.5 text-xs font-semibold px-3.5 py-2 rounded-xl border transition-all ${
+                isLight
+                  ? 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-300'
+                  : isTerracotta
+                  ? 'bg-[#F4EBE2] hover:bg-[#EFE8DF] text-[#A34B24] border-[#E8DFD5]'
+                  : 'bg-slate-800 hover:bg-slate-700 text-amber-300 border-slate-700'
+              } disabled:opacity-50`}
+            >
+              <Sparkles className="h-3.5 w-3.5 text-amber-500" />
+              <span>{isProcessing ? 'Processing...' : 'Try Demo Sample Photos'}</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Dropzone Area */}
@@ -381,6 +400,12 @@ export const MultiPhotoUploader: React.FC<MultiPhotoUploaderProps> = ({
           </div>
         </div>
       )}
+
+      {/* Good vs Bad Photo Guidelines Modal */}
+      <PhotoGuidelinesModal
+        isOpen={isGuidelinesOpen}
+        onClose={() => setIsGuidelinesOpen(false)}
+      />
     </div>
   );
 };

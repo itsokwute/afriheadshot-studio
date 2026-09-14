@@ -4,6 +4,10 @@ import React, { useState } from 'react';
 import { ThemeProvider, useTheme } from '../lib/theme-context';
 import { Navbar } from '../components/navbar';
 import { Hero } from '../components/hero';
+import { EnterpriseLogoStrip } from '../components/EnterpriseLogoStrip';
+import { WorkflowExplainer } from '../components/WorkflowExplainer';
+import { BiometricPrivacySection } from '../components/BiometricPrivacySection';
+import { CategorizedFooter } from '../components/CategorizedFooter';
 import { BatchUploader } from '../components/uploader/batch-uploader';
 import { ImageCropper } from '../components/uploader/image-cropper';
 import { SelectionMatrix } from '../components/matrix/selection-matrix';
@@ -21,7 +25,7 @@ import {
   GenerationConfig
 } from '../lib/types';
 import { BACKGROUND_PRESETS, HAIRSTYLE_PRESETS, OUTFIT_PRESETS } from '../lib/presets-data';
-import { UserCheck, Zap, CheckCircle2, History, ArrowRight, Square, Circle } from 'lucide-react';
+import { Zap, CheckCircle2, History, ArrowRight, Square, Circle } from 'lucide-react';
 
 function StudioApp() {
   const { theme } = useTheme();
@@ -63,6 +67,23 @@ function StudioApp() {
   const [results, setResults] = useState<GeneratedResult[]>([]);
 
   const anchorPhoto = photos.find((p) => p.id === anchorPhotoId) || photos[0];
+
+  // Category filter handler triggered from CategorizedFooter
+  const handleCategoryFilter = (filterKey: string) => {
+    const matchingBg = BACKGROUND_PRESETS.find(
+      (b) => b.category === filterKey || b.title.toLowerCase().includes(filterKey.toLowerCase())
+    );
+    if (matchingBg) {
+      setSelectedBackground(matchingBg);
+    }
+    const matchingOutfit = OUTFIT_PRESETS.find(
+      (o) => o.category.toLowerCase().includes(filterKey.toLowerCase()) || o.title.toLowerCase().includes(filterKey.toLowerCase())
+    );
+    if (matchingOutfit) {
+      setSelectedOutfit(matchingOutfit);
+    }
+    setActiveStep(3);
+  };
 
   // Trigger Headshot AI Generation Workflow
   const handleGenerate = async () => {
@@ -175,9 +196,15 @@ function StudioApp() {
       {/* Hero Showcase Section - Auto-collapses on Step 4 (Results Gallery) */}
       {activeStep !== 4 && <Hero />}
 
+      {/* Enterprise Corporate Social Proof Logo Marquee */}
+      {activeStep !== 4 && <EnterpriseLogoStrip />}
+
       {/* Studio Workspace Application Section */}
       <main id="studio" className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-10 space-y-10">
         
+        {/* 3-Step Workflow Scaffolding Explainer Strip */}
+        <WorkflowExplainer />
+
         {/* First-Timers Guided Stepper Bar with Enhanced Light/Terracotta Contrast */}
         <div className={`p-4 rounded-2xl border transition-colors ${
           isLight
@@ -309,6 +336,9 @@ function StudioApp() {
                 </div>
               </div>
             </div>
+
+            {/* 4-Point Enterprise Biometric Privacy Guarantee */}
+            <BiometricPrivacySection />
           </div>
         )}
 
@@ -490,19 +520,8 @@ function StudioApp() {
         />
       )}
 
-      {/* Footer */}
-      <footer className={`border-t py-8 px-4 text-center text-xs opacity-75 transition-colors ${
-        isLight ? 'bg-white border-slate-200' : isTerracotta ? 'bg-[#FAF7F2] border-[#E8DFD5]' : 'bg-slate-950 border-slate-900'
-      }`}>
-        <div className="max-w-7xl mx-auto space-y-2">
-          <p className="font-semibold">
-            AfriHeadshot Studio © 2026 • Tailored for African Executive & Professional Excellence
-          </p>
-          <p>
-            Strictly enforcing authentic melanin skin tones, natural afro hair preservation, and zero skin-lightening bias.
-          </p>
-        </div>
-      </footer>
+      {/* Categorized Intent Directory Footer */}
+      <CategorizedFooter onSelectCategoryFilter={handleCategoryFilter} />
     </div>
   );
 }
