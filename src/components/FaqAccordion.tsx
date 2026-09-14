@@ -25,8 +25,12 @@ export const FaqAccordion: React.FC = () => {
       answer: 'Our custom prompt injector enforces zero skin-lightening bias. It strictly locks in authentic melanin undertones (Rich Warm Cocoa, Deep Ebony, Golden Bronze) and authentic 4C hair textures including low fades, 360 waves, locs, box braids, and Senegalese twists.'
     },
     {
-      question: 'Can I use these headshots directly on LinkedIn and resumes?',
+      question: 'Can I use these headshots on LinkedIn, resumes, and executive profiles?',
       answer: 'Yes! All exported headshots are delivered in high-resolution 2048x2048 PNG format with standard 1:1 square and 4:5 portrait aspect ratio presets, perfect for LinkedIn profile avatars, corporate websites, speaker press kits, and executive resumes.'
+    },
+    {
+      question: 'Do I retain full ownership of my headshots?',
+      answer: 'Yes, 100%. You retain full commercial and personal ownership of all generated headshots. You are free to use them across any corporate, commercial, or personal platform without attribution.'
     }
   ];
 
@@ -40,16 +44,16 @@ export const FaqAccordion: React.FC = () => {
     }`}>
       <div className="max-w-4xl mx-auto px-4 lg:px-8 space-y-8">
         
-        {/* Section Header */}
+        {/* Sentence Case Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-600 text-xs font-bold uppercase tracking-wider">
             <HelpCircle className="h-3.5 w-3.5" />
-            <span>Got Questions?</span>
+            <span>Got questions?</span>
           </div>
           <h2 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${
             isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
           }`}>
-            Frequently Asked <span className="text-blue-600">Questions</span>
+            Frequently asked <span className="text-blue-600">questions</span>
           </h2>
           <p className="text-sm opacity-75">
             Everything you need to know about our AI headshot studio process.

@@ -8,15 +8,15 @@ export const EnterpriseLogoStrip: React.FC = () => {
   const isLight = theme === 'light';
   const isTerracotta = theme === 'terracotta';
 
-  const enterpriseHubs = [
-    { name: 'Paystack', location: 'Lagos & SF' },
-    { name: 'Flutterwave', location: 'Lagos & NY' },
-    { name: 'Safaricom', location: 'Nairobi' },
-    { name: 'Standard Bank', location: 'Johannesburg' },
-    { name: 'Access Bank', location: 'Lagos & London' },
-    { name: 'MTN Group', location: 'Johannesburg' },
-    { name: 'Interswitch', location: 'Lagos & Nairobi' },
-    { name: 'Kuda Bank', location: 'Lagos & London' }
+  const enterpriseBrands = [
+    { name: 'Paystack', hub: 'Lagos & SF' },
+    { name: 'Flutterwave', hub: 'Lagos & NY' },
+    { name: 'Safaricom', hub: 'Nairobi' },
+    { name: 'Standard Bank', hub: 'Johannesburg' },
+    { name: 'Access Bank', hub: 'Lagos & London' },
+    { name: 'MTN Group', hub: 'Johannesburg' },
+    { name: 'Interswitch', hub: 'Lagos & Nairobi' },
+    { name: 'Kuda Bank', hub: 'Lagos & London' }
   ];
 
   return (
@@ -28,7 +28,7 @@ export const EnterpriseLogoStrip: React.FC = () => {
         : 'bg-slate-950 border-slate-900'
     }`}>
       <div className="max-w-7xl mx-auto px-4 lg:px-8 space-y-6">
-        {/* Exact Headline Required */}
+        {/* Sentence Case Heading */}
         <div className="text-center">
           <h3 className={`text-base sm:text-lg font-bold tracking-tight ${
             isLight ? 'text-slate-700' : isTerracotta ? 'text-[#2D241E]' : 'text-slate-300'
@@ -37,9 +37,9 @@ export const EnterpriseLogoStrip: React.FC = () => {
           </h3>
         </div>
 
-        {/* Responsive Grayscale Enterprise Logo Marquee Grid */}
+        {/* Grayscale Logo Marquee */}
         <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4 pt-2">
-          {enterpriseHubs.map((hub, idx) => (
+          {enterpriseBrands.map((brand, idx) => (
             <div
               key={idx}
               className={`p-3.5 rounded-xl border flex flex-col items-center justify-center text-center transition-all duration-300 group hover:grayscale-0 grayscale opacity-75 hover:opacity-100 ${
@@ -53,10 +53,10 @@ export const EnterpriseLogoStrip: React.FC = () => {
               <span className={`font-black text-sm tracking-tight ${
                 isLight ? 'text-slate-800' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
               }`}>
-                {hub.name}
+                {brand.name}
               </span>
               <span className="text-[10px] opacity-60 font-medium truncate max-w-[100px] mt-0.5">
-                {hub.location}
+                {brand.hub}
               </span>
             </div>
           ))}

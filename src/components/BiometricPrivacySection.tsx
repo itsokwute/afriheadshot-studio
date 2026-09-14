@@ -12,27 +12,27 @@ export const BiometricPrivacySection: React.FC = () => {
   const cards = [
     {
       title: 'Delete when you want (or we do it for you)',
-      desc: 'All uploaded selfie inputs and vector face maps are automatically purged after 30 days, or instantly upon request.',
+      desc: 'All uploaded selfies and generated images are automatically deleted after 30 days, or instantly upon request.',
       icon: Trash2,
-      badge: '30-Day Auto-Purge'
+      badge: '30-day auto-purge'
     },
     {
       title: 'Your images for your headshots only',
-      desc: 'Your likeness is your exclusive property; never reused or used to train public foundation models.',
+      desc: 'Individual AI models are run in ephemeral memory and never used to train public foundation models.',
       icon: Lock,
-      badge: 'Zero AI Training'
+      badge: 'Ephemeral memory'
     },
     {
       title: 'Caring by not sharing',
-      desc: 'Strict zero third-party data selling, ad tracking, or commercial monetization of user photos.',
+      desc: 'We do not share, distribute, or sell your images or personal data to third parties.',
       icon: ShieldCheck,
-      badge: 'No Data Ads'
+      badge: 'Zero third-party sharing'
     },
     {
       title: 'Rock-solid security',
-      desc: 'Bank-grade TLS 1.3 encrypted transit with SOC-2 compliant isolated ephemeral storage buffers.',
+      desc: 'Passwordless, encrypted in transit via TLS 1.3 with protected, isolated storage buffers.',
       icon: Server,
-      badge: 'TLS 1.3 Encrypted'
+      badge: 'TLS 1.3 encrypted'
     }
   ];
 
@@ -46,10 +46,10 @@ export const BiometricPrivacySection: React.FC = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-4 lg:px-8 space-y-8">
         
-        {/* Exact Headline Required */}
+        {/* Sentence Case Heading & Subtitle */}
         <div className="text-center space-y-2 max-w-2xl mx-auto">
           <span className="text-xs font-mono font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase tracking-wider">
-            Enterprise Trust & Compliance
+            Biometric privacy guarantee
           </span>
           <h2 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${
             isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
@@ -57,7 +57,7 @@ export const BiometricPrivacySection: React.FC = () => {
             Your data is yours, <span className="text-blue-600">and yours only</span>
           </h2>
           <p className="text-sm opacity-75">
-            We prioritize your privacy and biometric security at every level of our stack.
+            Throughout your journey, your data is secure and in your control.
           </p>
         </div>
 

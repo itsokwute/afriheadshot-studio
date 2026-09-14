@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTheme } from '../lib/theme-context';
-import { Building2, Briefcase, ArrowUpRight, Camera } from 'lucide-react';
+import { Building2, ArrowUpRight, Camera } from 'lucide-react';
 
 interface CategorizedFooterProps {
   onSelectCategoryFilter?: (sectorOrRole: string) => void;
@@ -13,20 +13,22 @@ export const CategorizedFooter: React.FC<CategorizedFooterProps> = ({ onSelectCa
   const isLight = theme === 'light';
   const isTerracotta = theme === 'terracotta';
 
+  // Photo types in strict Sentence Case
   const photoTypes = [
-    { name: 'LinkedIn Headshots', filterKey: 'LinkedIn' },
-    { name: 'Corporate Headshots', filterKey: 'Corporate' },
-    { name: 'Executive Headshots', filterKey: 'Executive' },
-    { name: 'Doctor Headshots', filterKey: 'Medical' },
-    { name: 'Lawyer Headshots', filterKey: 'Legal' },
-    { name: 'Real Estate Headshots', filterKey: 'RealEstate' }
+    { name: 'LinkedIn headshots', filterKey: 'LinkedIn' },
+    { name: 'Corporate headshots', filterKey: 'Corporate' },
+    { name: 'Executive headshots', filterKey: 'Executive' },
+    { name: 'Doctor headshots', filterKey: 'Medical' },
+    { name: 'Lawyer headshots', filterKey: 'Legal' },
+    { name: 'Real estate headshots', filterKey: 'RealEstate' }
   ];
 
-  const africanSectors = [
-    { name: 'FinTech', presetCategory: 'Tech Hub Glass' },
-    { name: 'Banking & Legal', presetCategory: 'Executive Suites' },
-    { name: 'Energy & Mining', presetCategory: 'African Boardrooms' },
-    { name: 'Creative & Media', presetCategory: 'Studio Gradients' }
+  // Sectors in strict Sentence Case
+  const sectors = [
+    { name: 'Tech & fintech', presetCategory: 'Tech Hub Glass' },
+    { name: 'Banking & finance', presetCategory: 'Executive Suites' },
+    { name: 'Energy & engineering', presetCategory: 'African Boardrooms' },
+    { name: 'Creative & media', presetCategory: 'Studio Gradients' }
   ];
 
   const handleClick = (key: string) => {
@@ -64,17 +66,17 @@ export const CategorizedFooter: React.FC<CategorizedFooterProps> = ({ onSelectCa
               The premier AI executive headshot generator tailored for African leadership. Replicating modern studio photography with strict preservation of authentic melanin tones, bone structure, and afro hair textures.
             </p>
             <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-blue-400 font-bold">
-              <span className="bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-md">★ 4.9/5 Rating</span>
-              <span className="bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-md">16,800+ Verified Reviews</span>
-              <span className="bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-md">Zero Lightening Bias</span>
+              <span className="bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-md">★ 4.9/5 rating</span>
+              <span className="bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-md">16,800+ verified reviews</span>
+              <span className="bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-md">Zero skin-lightening bias</span>
             </div>
           </div>
 
-          {/* Photo Types Column (Exact Requirement) */}
+          {/* Photo types Column (Sentence Case) */}
           <div className="space-y-3">
             <h4 className="font-bold text-sm flex items-center space-x-1.5 text-blue-400 uppercase tracking-wider">
               <Camera className="h-4 w-4" />
-              <span>Photo Types</span>
+              <span>Photo types</span>
             </h4>
             <ul className="space-y-2.5">
               {photoTypes.map((pt, idx) => (
@@ -92,14 +94,14 @@ export const CategorizedFooter: React.FC<CategorizedFooterProps> = ({ onSelectCa
             </ul>
           </div>
 
-          {/* African Business Sectors Column (Exact Requirement) */}
+          {/* Sectors Column (Sentence Case) */}
           <div className="space-y-3">
             <h4 className="font-bold text-sm flex items-center space-x-1.5 text-blue-400 uppercase tracking-wider">
               <Building2 className="h-4 w-4" />
-              <span>African Business Sectors</span>
+              <span>Sectors</span>
             </h4>
             <ul className="space-y-2.5">
-              {africanSectors.map((sec, idx) => (
+              {sectors.map((sec, idx) => (
                 <li key={idx}>
                   <button
                     type="button"
@@ -119,7 +121,7 @@ export const CategorizedFooter: React.FC<CategorizedFooterProps> = ({ onSelectCa
         {/* Bottom Copyright Line */}
         <div className="pt-8 border-t border-slate-800 text-center text-xs opacity-75 space-y-1.5">
           <p className="font-semibold">
-            AfriHeadshot Studio © 2026 • Commercial Studio-Grade Executive Portraiture
+            AfriHeadshot Studio © 2026 • Commercial studio-grade executive portraiture
           </p>
           <p>
             Strictly enforcing authentic melanin skin tones, natural afro hair preservation, and zero skin-lightening bias.

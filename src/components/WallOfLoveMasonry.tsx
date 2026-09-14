@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Star, CheckCircle2, Quote } from 'lucide-react';
+import { Star, CheckCircle2 } from 'lucide-react';
 import { useTheme } from '../lib/theme-context';
 
 export const WallOfLoveMasonry: React.FC = () => {
@@ -13,48 +13,47 @@ export const WallOfLoveMasonry: React.FC = () => {
     {
       type: 'photo-card',
       image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80',
-      quote: 'My curls & fade were PERFECTLY portrayed - I could not believe it.',
+      quote: 'My curls were perfectly portrayed — I could not believe it.',
       author: 'Carroll D.',
       role: 'Product Lead, Lagos'
     },
     {
       type: 'quote-card',
-      quote: 'Amazing! I was surprised at how simple the whole process was to complete!',
-      author: 'Amina B.',
+      quote: 'Loved the variety and styling. The pictures turned out great and look completely natural.',
+      author: 'Michael O.',
       role: 'Corporate VP, Nairobi',
-      stars: 5,
-      verified: true,
-      highlight: true
-    },
-    {
-      type: 'quote-card',
-      quote: 'Saved me $400 on a commercial photo shoot. The Senator suit lighting looks completely real.',
-      author: 'Kwame O.',
-      role: 'Investment Banker, London',
       stars: 5,
       verified: true
     },
     {
       type: 'photo-card',
       image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80',
-      quote: 'Extremely impressive face preservation. Used directly on my company bio & LinkedIn.',
-      author: 'Tunde E.',
+      quote: 'Amazing! Several colleagues reached out asking which studio I visited.',
+      author: 'Richard P.',
       role: 'Tech Founder, Johannesburg'
     },
     {
       type: 'quote-card',
-      quote: 'As a lawyer, I needed sharp executive portraits. The melanin undertone accuracy is unmatched.',
-      author: 'Chika N.',
-      role: 'Senior Attorney, Abuja',
+      quote: 'I was amazed at how easy it was to get executive headshots from my bedroom.',
+      author: 'Carol R.',
+      role: 'Senior Attorney, London',
       stars: 5,
       verified: true
     },
     {
       type: 'photo-card',
       image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80',
-      quote: 'The Box Braids and studio lighting options are astonishingly accurate.',
+      quote: 'The melanin skin tones and box braids look astonishingly authentic.',
       author: 'Zainab M.',
       role: 'Design Director, Kigali'
+    },
+    {
+      type: 'quote-card',
+      quote: 'Saved $400 on a physical photoshoot. The Senator suit and lighting options are immaculate.',
+      author: 'Tunde A.',
+      role: 'Finance Manager, Abuja',
+      stars: 5,
+      verified: true
     }
   ];
 
@@ -68,18 +67,18 @@ export const WallOfLoveMasonry: React.FC = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-4 lg:px-8 space-y-10">
         
-        {/* Section Header */}
+        {/* Sentence Case Section Header */}
         <div className="text-center space-y-2 max-w-2xl mx-auto">
           <span className="text-xs font-extrabold uppercase tracking-widest text-blue-600 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full">
-            Wall of Love
+            Wall of love
           </span>
           <h2 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${
             isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
           }`}>
-            Loved by leaders <span className="text-blue-600">across 25+ countries</span>
+            Loved by professionals <span className="text-blue-600">across 25+ countries</span>
           </h2>
           <p className="text-sm opacity-75">
-            See what professionals are saying about their AI headshots.
+            Read authentic reviews from Black executives and professionals worldwide.
           </p>
         </div>
 
@@ -105,7 +104,7 @@ export const WallOfLoveMasonry: React.FC = () => {
                       "{rev.quote}"
                     </p>
                     <div className="flex items-center justify-between text-xs pt-1 border-t border-white/20">
-                      <span className="font-extrabold text-amber-300">{rev.author}</span>
+                      <span className="font-extrabold text-amber-300">— {rev.author}</span>
                       <span className="text-[11px] opacity-80">{rev.role}</span>
                     </div>
                   </div>
@@ -117,9 +116,7 @@ export const WallOfLoveMasonry: React.FC = () => {
               <div
                 key={idx}
                 className={`p-6 rounded-2xl border flex flex-col justify-between space-y-4 shadow-lg transition-all ${
-                  rev.highlight
-                    ? 'border-blue-500 bg-blue-50/30 ring-2 ring-blue-500/20'
-                    : isLight
+                  isLight
                     ? 'bg-white border-slate-200'
                     : isTerracotta
                     ? 'bg-white border-[#E8DFD5]'
@@ -136,7 +133,7 @@ export const WallOfLoveMasonry: React.FC = () => {
                     {rev.verified && (
                       <span className="inline-flex items-center space-x-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
                         <CheckCircle2 className="h-3 w-3" />
-                        <span>Verified Output</span>
+                        <span>Verified output</span>
                       </span>
                     )}
                   </div>
@@ -156,7 +153,7 @@ export const WallOfLoveMasonry: React.FC = () => {
                     <h5 className={`font-bold text-xs ${
                       isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
                     }`}>
-                      {rev.author}
+                      — {rev.author}
                     </h5>
                     <p className="text-[11px] opacity-75">{rev.role}</p>
                   </div>
