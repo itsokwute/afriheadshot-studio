@@ -2,97 +2,186 @@
 
 import React from 'react';
 import { useTheme } from '../lib/theme-context';
-import { Upload, Cpu, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { ArrowDown, Cpu, Sparkles } from 'lucide-react';
 
 export const WorkflowExplainer: React.FC = () => {
   const { theme } = useTheme();
   const isLight = theme === 'light';
   const isTerracotta = theme === 'terracotta';
 
-  const steps = [
+  const inputSelfies = [
+    'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80',
+    'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80',
+    'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=300&q=80'
+  ];
+
+  const aiOutputs = [
     {
-      num: '01',
-      title: 'Upload a few photos',
-      desc: 'Upload 1 to 10 casual selfies or existing photos with natural lighting and varied facial expressions.',
-      icon: Upload,
-      badge: 'Step 1: Input Dataset'
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
+      title: 'Executive Office'
     },
     {
-      num: '02',
-      title: 'Our AI learns how you look',
-      desc: 'Our identity engine preserves bone structure, authentic melanin undertones, and natural afro hair texture.',
-      icon: Cpu,
-      badge: 'Step 2: Biometric Mapping'
+      image: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
+      title: 'Senator Suit Formal'
     },
     {
-      num: '03',
-      title: 'Headshots ready in 15 minutes',
-      desc: 'Download high-resolution 8K studio-grade executive portraits ready for LinkedIn, corporate bios & press.',
-      icon: Sparkles,
-      badge: 'Step 3: Studio Export'
+      image: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80',
+      title: 'Corporate Skyline'
+    },
+    {
+      image: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=400&q=80',
+      title: 'Studio Gradient'
     }
   ];
 
   return (
-    <div className="space-y-4 my-6">
-      <div className="text-center space-y-1">
-        <h3 className={`font-extrabold text-xl ${
-          isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
-        }`}>
-          How AfriHeadshot Studio Works in 3 Simple Steps
-        </h3>
-        <p className="text-xs opacity-75">
-          No physical studio appointment, expensive photographers, or tedious editing required.
-        </p>
-      </div>
+    <section className={`py-12 border-b transition-colors ${
+      isLight
+        ? 'bg-white border-slate-200'
+        : isTerracotta
+        ? 'bg-[#FAF7F2] border-[#E8DFD5]'
+        : 'bg-slate-950 border-slate-900'
+    }`}>
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 space-y-10">
+        
+        {/* Exact Headline Required */}
+        <div className="text-center space-y-2 max-w-3xl mx-auto">
+          <h2 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${
+            isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
+          }`}>
+            Hundreds of headshots,{' '}
+            <span className="text-blue-600">15 minutes of your time</span>
+          </h2>
+          <p className="text-sm opacity-75">
+            Follow our clean visual pipeline to transform everyday selfies into studio executive portraits.
+          </p>
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {steps.map((step, idx) => {
-          const IconComp = step.icon;
-          return (
-            <div
-              key={idx}
-              className={`relative p-5 rounded-2xl border transition-all flex flex-col justify-between group ${
-                isLight
-                  ? 'bg-white border-slate-200 shadow-sm hover:border-amber-400'
-                  : isTerracotta
-                  ? 'bg-white border-[#E8DFD5] shadow-sm hover:border-amber-500'
-                  : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'
-              }`}
-            >
+        {/* Visual Pipeline Tree */}
+        <div className="max-w-4xl mx-auto space-y-8">
+          
+          {/* Step 1: Horizontal Row of 4 Casual Input Selfies */}
+          <div className={`p-6 rounded-2xl border transition-all ${
+            isLight
+              ? 'bg-slate-50 border-slate-200'
+              : isTerracotta
+              ? 'bg-white border-[#E8DFD5]'
+              : 'bg-slate-900/80 border-slate-800'
+          }`}>
+            <div className="flex items-center justify-between mb-4">
               <div>
-                <div className="flex items-center justify-between mb-3">
-                  <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 font-extrabold">
-                    <IconComp className="h-5 w-5" />
-                  </div>
-                  <span className="text-xs font-mono font-bold text-amber-500 bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
-                    {step.num}
-                  </span>
-                </div>
-
-                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-600">
-                  {step.badge}
+                <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
+                  STEP 01
                 </span>
-
                 <h4 className={`font-bold text-base mt-1 ${
                   isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
                 }`}>
-                  {step.title}
+                  Upload a few photos
                 </h4>
-
-                <p className="text-xs opacity-75 mt-1.5 leading-relaxed">
-                  {step.desc}
-                </p>
               </div>
-
-              <div className="mt-4 pt-3 border-t border-slate-200/40 flex items-center justify-between text-[11px] font-semibold text-amber-500">
-                <span>Fast AI Pipeline</span>
-                <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-              </div>
+              <span className="text-xs opacity-75 hidden sm:inline-block">
+                4-10 casual selfies or reference shots
+              </span>
             </div>
-          );
-        })}
+
+            <div className="grid grid-cols-4 gap-3">
+              {inputSelfies.map((url, idx) => (
+                <div key={idx} className="aspect-square rounded-xl overflow-hidden border border-slate-300/60 shadow-sm relative group">
+                  <img src={url} alt="Casual Selfie Input" className="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                  <span className="absolute bottom-1.5 left-1.5 text-[9px] font-bold bg-slate-950/80 text-white px-1.5 py-0.5 rounded backdrop-blur">
+                    Selfie #{idx + 1}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Arrow Down Indicator */}
+          <div className="flex items-center justify-center text-blue-600">
+            <div className="h-10 w-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center shadow-sm animate-bounce">
+              <ArrowDown className="h-5 w-5" />
+            </div>
+          </div>
+
+          {/* Step 2: AI Learns How You Look */}
+          <div className={`p-6 rounded-2xl border text-center space-y-3 ${
+            isLight
+              ? 'bg-blue-50/40 border-blue-200'
+              : isTerracotta
+              ? 'bg-white border-[#E8DFD5]'
+              : 'bg-slate-900/90 border-slate-800'
+          }`}>
+            <div className="inline-flex items-center justify-center h-12 w-12 rounded-2xl bg-blue-600 text-white shadow-md mb-1">
+              <Cpu className="h-6 w-6" />
+            </div>
+            <div>
+              <span className="text-xs font-mono font-bold text-blue-600 bg-blue-100 border border-blue-200 px-2.5 py-0.5 rounded-full">
+                STEP 02
+              </span>
+              <h3 className={`text-xl font-extrabold mt-1 ${
+                isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
+              }`}>
+                Our AI learns how you look
+              </h3>
+            </div>
+            <p className="text-xs max-w-lg mx-auto opacity-80 leading-relaxed">
+              Biometric feature extractor maps facial structure, melanin undertones, and 4C afro hair texture without skin-lightening bias.
+            </p>
+          </div>
+
+          {/* Arrow Down Indicator */}
+          <div className="flex items-center justify-center text-blue-600">
+            <div className="h-10 w-10 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center shadow-sm animate-bounce">
+              <ArrowDown className="h-5 w-5" />
+            </div>
+          </div>
+
+          {/* Step 3: 2x2 Grid of 4 Photorealistic Executive Outputs with AI GENERATED Chips */}
+          <div className={`p-6 rounded-2xl border transition-all ${
+            isLight
+              ? 'bg-slate-50 border-slate-200'
+              : isTerracotta
+              ? 'bg-white border-[#E8DFD5]'
+              : 'bg-slate-900/80 border-slate-800'
+          }`}>
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-xs font-mono font-bold text-blue-600 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-full">
+                  STEP 03
+                </span>
+                <h4 className={`font-bold text-base mt-1 ${
+                  isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
+                }`}>
+                  Headshots ready in 15 minutes
+                </h4>
+              </div>
+              <span className="text-xs font-semibold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                2048x2048 PNG Studio Exports
+              </span>
+            </div>
+
+            {/* 2x2 Grid with AI GENERATED Micro-Badges */}
+            <div className="grid grid-cols-2 gap-4">
+              {aiOutputs.map((out, idx) => (
+                <div key={idx} className="relative aspect-square rounded-2xl overflow-hidden border border-slate-300/80 shadow-md group">
+                  <img src={out.image} alt={out.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  
+                  {/* AI GENERATED Micro Badge (Exact Requirement) */}
+                  <div className="absolute bottom-3 left-3 bg-black/70 text-white text-[10px] font-extrabold tracking-wider px-2.5 py-1 rounded-md backdrop-blur shadow-md uppercase">
+                    AI GENERATED
+                  </div>
+
+                  <div className="absolute top-3 right-3 bg-slate-950/80 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-md border border-slate-700">
+                    {out.title}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
+    </section>
   );
 };

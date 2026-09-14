@@ -9,77 +9,99 @@ export const BiometricPrivacySection: React.FC = () => {
   const isLight = theme === 'light';
   const isTerracotta = theme === 'terracotta';
 
-  const privacyPoints = [
+  const cards = [
     {
       title: 'Delete when you want (or we do it for you)',
-      desc: 'All uploaded selfie inputs and vector face maps are automatically deleted after 30 days, or instantly upon request.',
-      icon: Trash2
+      desc: 'All uploaded selfie inputs and vector face maps are automatically purged after 30 days, or instantly upon request.',
+      icon: Trash2,
+      badge: '30-Day Auto-Purge'
     },
     {
       title: 'Your images for your headshots only',
-      desc: 'Your facial likeness remains 100% your property; never used or licensed to train public AI foundation models.',
-      icon: Lock
+      desc: 'Your likeness is your exclusive property; never reused or used to train public foundation models.',
+      icon: Lock,
+      badge: 'Zero AI Training'
     },
     {
       title: 'Caring by not sharing',
       desc: 'Strict zero third-party data selling, ad tracking, or commercial monetization of user photos.',
-      icon: ShieldCheck
+      icon: ShieldCheck,
+      badge: 'No Data Ads'
     },
     {
       title: 'Rock-solid security',
-      desc: 'Bank-grade TLS 1.3 encrypted transit with SOC-2 compliant isolated storage buffers.',
-      icon: Server
+      desc: 'Bank-grade TLS 1.3 encrypted transit with SOC-2 compliant isolated ephemeral storage buffers.',
+      icon: Server,
+      badge: 'TLS 1.3 Encrypted'
     }
   ];
 
   return (
-    <div className={`p-6 rounded-2xl border transition-colors my-6 ${
+    <section className={`py-12 border-b transition-colors ${
       isLight
-        ? 'bg-slate-50/80 border-slate-200 shadow-sm'
+        ? 'bg-slate-50 border-slate-200'
         : isTerracotta
-        ? 'bg-[#FAF7F2] border-[#E8DFD5] shadow-sm'
-        : 'bg-slate-900/60 border-slate-800'
+        ? 'bg-[#FAF7F2] border-[#E8DFD5]'
+        : 'bg-slate-950 border-slate-900'
     }`}>
-      {/* Section Header */}
-      <div className="flex items-center space-x-2 mb-4 pb-3 border-b border-slate-200/40">
-        <ShieldCheck className="h-5 w-5 text-emerald-500" />
-        <h4 className={`font-bold text-sm sm:text-base ${
-          isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
-        }`}>
-          Enterprise-Grade Biometric Privacy & Data Security Architecture
-        </h4>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 lg:px-8 space-y-8">
+        
+        {/* Exact Headline Required */}
+        <div className="text-center space-y-2 max-w-2xl mx-auto">
+          <span className="text-xs font-mono font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-3 py-1 rounded-full uppercase tracking-wider">
+            Enterprise Trust & Compliance
+          </span>
+          <h2 className={`text-3xl sm:text-4xl font-extrabold tracking-tight ${
+            isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
+          }`}>
+            Your data is yours, <span className="text-blue-600">and yours only</span>
+          </h2>
+          <p className="text-sm opacity-75">
+            We prioritize your privacy and biometric security at every level of our stack.
+          </p>
+        </div>
 
-      {/* 4-Point Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {privacyPoints.map((point, idx) => {
-          const IconComp = point.icon;
-          return (
-            <div
-              key={idx}
-              className={`p-4 rounded-xl border transition-all ${
-                isLight
-                  ? 'bg-white border-slate-200'
-                  : isTerracotta
-                  ? 'bg-white border-[#E8DFD5]'
-                  : 'bg-slate-950 border-slate-800'
-              }`}
-            >
-              <div className="flex items-center space-x-2 text-emerald-500 mb-2">
-                <IconComp className="h-4 w-4 shrink-0" />
-                <h5 className={`font-bold text-xs ${
-                  isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
-                }`}>
-                  {point.title}
-                </h5>
+        {/* 4 Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {cards.map((card, idx) => {
+            const IconComp = card.icon;
+            return (
+              <div
+                key={idx}
+                className={`p-6 rounded-2xl border flex flex-col justify-between space-y-3 transition-all hover:shadow-md ${
+                  isLight
+                    ? 'bg-white border-slate-200'
+                    : isTerracotta
+                    ? 'bg-white border-[#E8DFD5]'
+                    : 'bg-slate-900/90 border-slate-800'
+                }`}
+              >
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="h-10 w-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600">
+                      <IconComp className="h-5 w-5" />
+                    </div>
+                    <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                      {card.badge}
+                    </span>
+                  </div>
+
+                  <h4 className={`font-bold text-sm sm:text-base leading-snug ${
+                    isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'
+                  }`}>
+                    {card.title}
+                  </h4>
+                  
+                  <p className="text-xs opacity-75 mt-2 leading-relaxed">
+                    {card.desc}
+                  </p>
+                </div>
               </div>
-              <p className="text-[11px] opacity-75 leading-relaxed">
-                {point.desc}
-              </p>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
       </div>
-    </div>
+    </section>
   );
 };

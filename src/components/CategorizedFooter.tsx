@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTheme } from '../lib/theme-context';
-import { Building, Briefcase, UserCheck, Layers, ArrowUpRight } from 'lucide-react';
+import { Building2, Briefcase, ArrowUpRight, Camera } from 'lucide-react';
 
 interface CategorizedFooterProps {
   onSelectCategoryFilter?: (sectorOrRole: string) => void;
@@ -13,20 +13,20 @@ export const CategorizedFooter: React.FC<CategorizedFooterProps> = ({ onSelectCa
   const isLight = theme === 'light';
   const isTerracotta = theme === 'terracotta';
 
-  const sectors = [
-    { name: 'Tech & FinTech Headshots', presetCategory: 'Tech Hub Glass' },
-    { name: 'Legal & Corporate Banking', presetCategory: 'Executive Suites' },
-    { name: 'Creative & Media Agency', presetCategory: 'Studio Gradients' },
-    { name: 'Oil & Energy Executive', presetCategory: 'African Boardrooms' }
-  ];
-
-  const roles = [
+  const photoTypes = [
+    { name: 'LinkedIn Headshots', filterKey: 'LinkedIn' },
     { name: 'Corporate Headshots', filterKey: 'Corporate' },
     { name: 'Executive Headshots', filterKey: 'Executive' },
-    { name: 'Doctor & Healthcare Headshots', filterKey: 'Medical' },
-    { name: 'Lawyer & Attorney Headshots', filterKey: 'Legal' },
-    { name: 'Real Estate & Broker Headshots', filterKey: 'RealEstate' },
-    { name: 'Women Leadership Headshots', filterKey: 'Women' }
+    { name: 'Doctor Headshots', filterKey: 'Medical' },
+    { name: 'Lawyer Headshots', filterKey: 'Legal' },
+    { name: 'Real Estate Headshots', filterKey: 'RealEstate' }
+  ];
+
+  const africanSectors = [
+    { name: 'FinTech', presetCategory: 'Tech Hub Glass' },
+    { name: 'Banking & Legal', presetCategory: 'Executive Suites' },
+    { name: 'Energy & Mining', presetCategory: 'African Boardrooms' },
+    { name: 'Creative & Media', presetCategory: 'Studio Gradients' }
   ];
 
   const handleClick = (key: string) => {
@@ -40,53 +40,51 @@ export const CategorizedFooter: React.FC<CategorizedFooterProps> = ({ onSelectCa
   };
 
   return (
-    <footer className={`border-t py-12 px-4 transition-colors ${
+    <footer className={`border-t py-14 px-4 transition-colors ${
       isLight
-        ? 'bg-white border-slate-200 text-slate-900'
+        ? 'bg-slate-900 text-white border-slate-800'
         : isTerracotta
-        ? 'bg-[#FAF7F2] border-[#E8DFD5] text-[#2D241E]'
-        : 'bg-slate-950 border-slate-900 text-white'
+        ? 'bg-[#2D241E] text-white border-[#1E1713]'
+        : 'bg-slate-950 text-white border-slate-900'
     }`}>
-      <div className="max-w-7xl mx-auto space-y-10">
+      <div className="max-w-7xl mx-auto space-y-12">
         
-        {/* Categorized Intent Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-xs">
+        {/* Directory Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-xs">
           
           {/* Brand & Mission Statement */}
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <div className="h-7 w-7 rounded-lg bg-amber-500 flex items-center justify-center font-black text-slate-950 text-sm">
+          <div className="space-y-3 lg:col-span-2">
+            <div className="flex items-center space-x-2.5">
+              <div className="h-8 w-8 rounded-xl bg-blue-600 flex items-center justify-center font-black text-white text-sm shadow-md">
                 AH
               </div>
-              <span className="font-extrabold text-sm tracking-tight">AfriHeadshot Studio</span>
+              <span className="font-extrabold text-base tracking-tight">AfriHeadshot Studio</span>
             </div>
-            <p className="opacity-75 leading-relaxed">
-              The premier AI executive headshot generator tailored for African professionals globally. Strict preservation of authentic melanin undertones, bone structure, and 4C hair textures.
+            <p className="opacity-75 leading-relaxed max-w-md">
+              The premier AI executive headshot generator tailored for African leadership. Replicating modern studio photography with strict preservation of authentic melanin tones, bone structure, and afro hair textures.
             </p>
-            <div className="flex items-center space-x-2 text-[11px] text-amber-500 font-bold">
-              <span>★ 4.9/5 Rating</span>
-              <span>•</span>
-              <span>25+ Countries</span>
-              <span>•</span>
-              <span>Zero Lightening Bias</span>
+            <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] text-blue-400 font-bold">
+              <span className="bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-md">★ 4.9/5 Rating</span>
+              <span className="bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-md">16,800+ Verified Reviews</span>
+              <span className="bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-md">Zero Lightening Bias</span>
             </div>
           </div>
 
-          {/* Headshots by Sector */}
+          {/* Photo Types Column (Exact Requirement) */}
           <div className="space-y-3">
-            <h4 className="font-bold text-sm flex items-center space-x-1.5 text-amber-500">
-              <Building className="h-4 w-4" />
-              <span>Headshots by Industry Sector</span>
+            <h4 className="font-bold text-sm flex items-center space-x-1.5 text-blue-400 uppercase tracking-wider">
+              <Camera className="h-4 w-4" />
+              <span>Photo Types</span>
             </h4>
-            <ul className="space-y-2">
-              {sectors.map((s, idx) => (
+            <ul className="space-y-2.5">
+              {photoTypes.map((pt, idx) => (
                 <li key={idx}>
                   <button
                     type="button"
-                    onClick={() => handleClick(s.presetCategory)}
-                    className="flex items-center space-x-1.5 opacity-80 hover:opacity-100 hover:text-amber-500 transition-colors"
+                    onClick={() => handleClick(pt.filterKey)}
+                    className="flex items-center space-x-1.5 opacity-80 hover:opacity-100 hover:text-blue-400 transition-colors text-left"
                   >
-                    <span>{s.name}</span>
+                    <span>{pt.name}</span>
                     <ArrowUpRight className="h-3 w-3 opacity-60" />
                   </button>
                 </li>
@@ -94,33 +92,34 @@ export const CategorizedFooter: React.FC<CategorizedFooterProps> = ({ onSelectCa
             </ul>
           </div>
 
-          {/* Headshots by Role */}
+          {/* African Business Sectors Column (Exact Requirement) */}
           <div className="space-y-3">
-            <h4 className="font-bold text-sm flex items-center space-x-1.5 text-amber-500">
-              <Briefcase className="h-4 w-4" />
-              <span>Headshots by Executive Role</span>
+            <h4 className="font-bold text-sm flex items-center space-x-1.5 text-blue-400 uppercase tracking-wider">
+              <Building2 className="h-4 w-4" />
+              <span>African Business Sectors</span>
             </h4>
-            <ul className="space-y-2">
-              {roles.map((r, idx) => (
+            <ul className="space-y-2.5">
+              {africanSectors.map((sec, idx) => (
                 <li key={idx}>
                   <button
                     type="button"
-                    onClick={() => handleClick(r.filterKey)}
-                    className="flex items-center space-x-1.5 opacity-80 hover:opacity-100 hover:text-amber-500 transition-colors"
+                    onClick={() => handleClick(sec.presetCategory)}
+                    className="flex items-center space-x-1.5 opacity-80 hover:opacity-100 hover:text-blue-400 transition-colors text-left"
                   >
-                    <span>{r.name}</span>
+                    <span>{sec.name}</span>
                     <ArrowUpRight className="h-3 w-3 opacity-60" />
                   </button>
                 </li>
               ))}
             </ul>
           </div>
+
         </div>
 
-        {/* Bottom Legal Copyright Line */}
-        <div className="pt-8 border-t border-slate-200/40 text-center text-xs opacity-75 space-y-2">
+        {/* Bottom Copyright Line */}
+        <div className="pt-8 border-t border-slate-800 text-center text-xs opacity-75 space-y-1.5">
           <p className="font-semibold">
-            AfriHeadshot Studio © 2026 • Tailored for African Executive & Professional Excellence
+            AfriHeadshot Studio © 2026 • Commercial Studio-Grade Executive Portraiture
           </p>
           <p>
             Strictly enforcing authentic melanin skin tones, natural afro hair preservation, and zero skin-lightening bias.

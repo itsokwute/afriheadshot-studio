@@ -5,8 +5,10 @@ import { ThemeProvider, useTheme } from '../lib/theme-context';
 import { Navbar } from '../components/navbar';
 import { Hero } from '../components/hero';
 import { EnterpriseLogoStrip } from '../components/EnterpriseLogoStrip';
+import { WallOfLoveMasonry } from '../components/WallOfLoveMasonry';
 import { WorkflowExplainer } from '../components/WorkflowExplainer';
 import { BiometricPrivacySection } from '../components/BiometricPrivacySection';
+import { FaqAccordion } from '../components/FaqAccordion';
 import { CategorizedFooter } from '../components/CategorizedFooter';
 import { BatchUploader } from '../components/uploader/batch-uploader';
 import { ImageCropper } from '../components/uploader/image-cropper';
@@ -193,19 +195,22 @@ function StudioApp() {
       {/* Top Navbar */}
       <Navbar />
 
-      {/* Hero Showcase Section - Auto-collapses on Step 4 (Results Gallery) */}
+      {/* Hero Showcase Section - Elevated Centered Card over 5-Row Photo Collage */}
       {activeStep !== 4 && <Hero />}
 
       {/* Enterprise Corporate Social Proof Logo Marquee */}
       {activeStep !== 4 && <EnterpriseLogoStrip />}
 
+      {/* Asymmetrical Wall of Love Review Masonry */}
+      {activeStep !== 4 && <WallOfLoveMasonry />}
+
       {/* Studio Workspace Application Section */}
-      <main id="studio" className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-10 space-y-10">
+      <main id="studio" className="flex-1 max-w-7xl w-full mx-auto px-4 lg:px-8 py-10 space-y-12">
         
-        {/* 3-Step Workflow Scaffolding Explainer Strip */}
+        {/* 3-Step Visual Pipeline Tree */}
         <WorkflowExplainer />
 
-        {/* First-Timers Guided Stepper Bar with Enhanced Light/Terracotta Contrast */}
+        {/* First-Timers Guided Stepper Bar */}
         <div className={`p-4 rounded-2xl border transition-colors ${
           isLight
             ? 'bg-white border-slate-200 shadow-sm'
@@ -219,7 +224,7 @@ function StudioApp() {
               onClick={() => setActiveStep(1)}
               className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
                 activeStep === 1
-                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+                  ? 'bg-slate-900 text-white shadow-md font-bold'
                   : photos.length > 0
                   ? isLight
                     ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
@@ -233,7 +238,7 @@ function StudioApp() {
                   : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 border border-slate-700'
               }`}
             >
-              <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">1</span>
+              <span className="h-5 w-5 rounded-full bg-white/20 flex items-center justify-center text-[10px]">1</span>
               <span>1. Upload Photos</span>
               {photos.length > 0 && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />}
             </button>
@@ -243,7 +248,7 @@ function StudioApp() {
               onClick={() => setActiveStep(2)}
               className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
                 activeStep === 2
-                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+                  ? 'bg-slate-900 text-white shadow-md font-bold'
                   : isLight
                   ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
                   : isTerracotta
@@ -251,7 +256,7 @@ function StudioApp() {
                   : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 border border-slate-700'
               }`}
             >
-              <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">2</span>
+              <span className="h-5 w-5 rounded-full bg-white/20 flex items-center justify-center text-[10px]">2</span>
               <span>2. Crop & Frame</span>
             </button>
 
@@ -260,7 +265,7 @@ function StudioApp() {
               onClick={() => setActiveStep(3)}
               className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
                 activeStep === 3
-                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+                  ? 'bg-slate-900 text-white shadow-md font-bold'
                   : isLight
                   ? 'bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200'
                   : isTerracotta
@@ -268,7 +273,7 @@ function StudioApp() {
                   : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 border border-slate-700'
               }`}
             >
-              <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">3</span>
+              <span className="h-5 w-5 rounded-full bg-white/20 flex items-center justify-center text-[10px]">3</span>
               <span>3. Choose Styles</span>
             </button>
 
@@ -277,7 +282,7 @@ function StudioApp() {
               onClick={() => setActiveStep(4)}
               className={`p-3 rounded-xl flex items-center justify-center space-x-2 transition-all ${
                 activeStep === 4
-                  ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+                  ? 'bg-slate-900 text-white shadow-md font-bold'
                   : results.length > 0
                   ? isLight
                     ? 'bg-emerald-50 text-emerald-800 border border-emerald-300'
@@ -291,7 +296,7 @@ function StudioApp() {
                   : 'bg-slate-800/80 text-slate-300 hover:bg-slate-800 border border-slate-700'
               }`}
             >
-              <span className="h-5 w-5 rounded-full bg-slate-950/20 flex items-center justify-center text-[10px]">4</span>
+              <span className="h-5 w-5 rounded-full bg-white/20 flex items-center justify-center text-[10px]">4</span>
               <span>4. Results Gallery</span>
               {results.length > 0 && <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />}
             </button>
@@ -328,7 +333,7 @@ function StudioApp() {
                     type="button"
                     onClick={() => setActiveStep(3)}
                     disabled={photos.length === 0}
-                    className="inline-flex items-center space-x-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition-all disabled:opacity-50"
+                    className="inline-flex items-center space-x-2 bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow-md transition-all disabled:opacity-50"
                   >
                     <span>Next: Select Background & Styles</span>
                     <ArrowRight className="h-4 w-4" />
@@ -337,7 +342,7 @@ function StudioApp() {
               </div>
             </div>
 
-            {/* 4-Point Enterprise Biometric Privacy Guarantee */}
+            {/* 4-Card Enterprise Biometric Privacy Guarantee */}
             <BiometricPrivacySection />
           </div>
         )}
@@ -368,25 +373,25 @@ function StudioApp() {
                 placeholder="e.g. Add subtle executive silver rim glasses, Rembrandt soft window lighting..."
                 value={customInstructions}
                 onChange={(e) => setCustomInstructions(e.target.value)}
-                className={`w-full rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-amber-500 border ${
+                className={`w-full rounded-xl px-4 py-2.5 text-xs focus:outline-none focus:border-blue-500 border ${
                   isLight ? 'bg-slate-50 border-slate-200 text-slate-900' : isTerracotta ? 'bg-[#FAF7F2] border-[#E8DFD5]' : 'bg-slate-950 border-slate-800 text-white'
                 }`}
               />
             </div>
 
-            {/* Primary Generation CTA Button */}
+            {/* Primary Generation CTA Button - Navy Solid Magic Studio Button */}
             <div className="text-center pt-2">
               <button
                 type="button"
                 onClick={handleGenerate}
                 disabled={isGenerating || photos.length === 0}
-                className="relative inline-flex items-center space-x-3 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-500 hover:from-amber-400 hover:to-yellow-400 text-slate-950 font-extrabold text-base md:text-lg px-10 py-4 rounded-2xl shadow-xl shadow-amber-500/25 transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                className="relative inline-flex items-center space-x-3 bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-base md:text-lg px-10 py-4 rounded-xl shadow-xl transition-all duration-200 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
-                <Zap className="h-6 w-6 fill-slate-950" />
+                <Zap className="h-6 w-6 fill-amber-400 text-amber-400" />
                 <span>
                   {isGenerating
                     ? 'Processing AI Batch Pipeline...'
-                    : `Generate 2 Studio Headshots (${photos.length} Photos Dataset)`}
+                    : `Generate Studio Headshots (${photos.length} Photos Dataset)`}
                 </span>
               </button>
             </div>
@@ -405,9 +410,9 @@ function StudioApp() {
           <section className="pt-6 space-y-6 border-t border-slate-200/40">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center space-x-2">
-                <History className="h-5 w-5 text-amber-500" />
+                <History className="h-5 w-5 text-blue-600" />
                 <h3 className="font-bold text-xl">Generated Headshots Studio Gallery</h3>
-                <span className="bg-amber-500/20 text-amber-600 text-xs font-bold px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                <span className="bg-blue-50 text-blue-600 text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200">
                   {results.length} Headshots
                 </span>
               </div>
@@ -421,7 +426,7 @@ function StudioApp() {
                     type="button"
                     onClick={() => setGlobalCirclePreview(false)}
                     className={`px-3 py-1 rounded-lg flex items-center space-x-1 transition-all ${
-                      !globalCirclePreview ? 'bg-amber-500 text-slate-950 font-bold shadow-md' : 'opacity-70 hover:opacity-100'
+                      !globalCirclePreview ? 'bg-slate-900 text-white font-bold shadow-md' : 'opacity-70 hover:opacity-100'
                     }`}
                   >
                     <Square className="h-3.5 w-3.5" />
@@ -431,7 +436,7 @@ function StudioApp() {
                     type="button"
                     onClick={() => setGlobalCirclePreview(true)}
                     className={`px-3 py-1 rounded-lg flex items-center space-x-1 transition-all ${
-                      globalCirclePreview ? 'bg-amber-500 text-slate-950 font-bold shadow-md' : 'opacity-70 hover:opacity-100'
+                      globalCirclePreview ? 'bg-slate-900 text-white font-bold shadow-md' : 'opacity-70 hover:opacity-100'
                     }`}
                   >
                     <Circle className="h-3.5 w-3.5" />
@@ -442,7 +447,7 @@ function StudioApp() {
                 <button
                   type="button"
                   onClick={() => setActiveStep(3)}
-                  className="text-xs font-semibold text-amber-500 hover:underline flex items-center space-x-1"
+                  className="text-xs font-semibold text-blue-600 hover:underline flex items-center space-x-1"
                 >
                   <span>+ Create Another Variant</span>
                 </button>
@@ -468,6 +473,9 @@ function StudioApp() {
           </section>
         )}
 
+        {/* Frequently Asked Questions Accordion */}
+        <FaqAccordion />
+
       </main>
 
       {/* Fixed Safe-Area Padded Bottom Bar for Mobile Screen CTA */}
@@ -480,7 +488,7 @@ function StudioApp() {
       }`}>
         <div className="text-xs">
           <p className="font-bold">{photos.length} Photos Loaded</p>
-          <p className="text-[10px] text-amber-500 font-medium truncate max-w-[140px]">
+          <p className="text-[10px] text-blue-600 font-medium truncate max-w-[140px]">
             {selectedBackground.title}
           </p>
         </div>
@@ -494,9 +502,9 @@ function StudioApp() {
             }
           }}
           disabled={isGenerating || (activeStep === 3 && photos.length === 0)}
-          className="bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg flex items-center space-x-2 disabled:opacity-50"
+          className="bg-slate-900 hover:bg-slate-800 text-white font-extrabold text-xs px-5 py-3 rounded-xl shadow-lg flex items-center space-x-2 disabled:opacity-50"
         >
-          <Zap className="h-4 w-4 fill-slate-950" />
+          <Zap className="h-4 w-4 fill-amber-400 text-amber-400" />
           <span>
             {isGenerating
               ? 'Generating...'
