@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+﻿import { NextRequest, NextResponse } from "next/server";
 import Replicate from "replicate";
 
 export const maxDuration = 60;
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
 
     const body = await req.json();
 
-    // 1. Locate the anchor photo or first photo
+    // Extract target image from nested photos array or fallback keys
     let targetImage: string | null = null;
     if (Array.isArray(body.photos) && body.photos.length > 0) {
       const anchor = body.photos.find((p: any) => p.id === body.anchorPhotoId) || body.photos[0];
@@ -27,19 +27,17 @@ export async function POST(req: NextRequest) {
 
     if (!targetImage) {
       return NextResponse.json(
-        { error: "Could not find a valid base64 or URL image in photos payload." },
+        { error: "Could not find a valid photo data URL in request." },
         { status: 400 }
       );
     }
 
-    // 2. Extract style descriptions from nested objects or strings
     const hairDesc = body.hairstyle?.title || body.hairstyle?.promptSnippet || body.hairstylePrompt || "natural groomed hair";
     const outfitDesc = body.outfit?.title || body.outfit?.promptSnippet || body.outfitPrompt || "bespoke executive suit";
     const bgDesc = body.background?.title || body.background?.promptSnippet || body.backgroundPrompt || "modern executive office";
     const skinTone = body.skinMelaninTone ? `${body.skinMelaninTone} skin tone` : "authentic rich melanin skin";
     const custom = body.customInstructions || "";
 
-    // 3. Set dimensions based on aspect ratio
     const isPortrait = body.aspectRatio === "4:5";
     const width = isPortrait ? 896 : 1024;
     const height = isPortrait ? 1152 : 1024;
@@ -79,22 +77,7 @@ export async function POST(req: NextRequest) {
       imageUrl = output.url();
     }
 
-    return NextResponse.json({
-      success: true,
-      imageUrl,
-      highResUrl: imageUrl,
-      id: `gen-${Date.now()}`,
-      originalAnchorUrl: targetImage,
-      aspectRatio: body.aspectRatio || "1:1",
-      positivePrompt: prompt,
-      negativePrompt: negative_prompt,
-      createdAt: new Date().toISOString(),
-      backgroundTitle: body.background?.title || "Executive Office",
-      hairstyleTitle: body.hairstyle?.title || "Natural Style",
-      outfitTitle: body.outfit?.title || "Corporate Suit",
-      seed: Math.floor(Math.random() * 9000000) + 1000000,
-      photoReferenceCount: Array.isArray(body.photos) ? body.photos.length : 1
-    });
+    return NextResponse.json({ success: true, imageUrl });
   } catch (error: any) {
     const errorMsg = error?.response?.data?.detail || error?.message || String(error);
     console.error("Replicate execution error:", errorMsg);
