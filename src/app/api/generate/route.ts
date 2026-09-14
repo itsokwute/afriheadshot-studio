@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Replicate from "replicate";
 
 export const maxDuration = 60;
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
 
     const replicate = new Replicate({ auth: token });
 
-    const prompt = `Award-winning corporate executive studio portrait of an African professional, ${skinTone}, ${hairDesc}, wearing ${outfitDesc}, ${bgDesc}, ${custom}, shot on Hasselblad H6D-100c, 85mm portrait lens, f/1.8, soft commercial rim lighting, realistic melanin skin pores, sharp detailed eyes, 8k resolution, photorealistic LinkedIn profile photo`;
+    const prompt = `Award-winning corporate executive studio portrait of an African professional, ${skinTone}, ${hairDesc}, wearing ${outfitDesc}, ${bgDesc}, ${custom}, shot on Hasselblad H6D-100c, 85mm portrait lens, f/1.8, soft commercial rim lighting, realistic melanin skin pores, sharp detailed eyes, 8k resolution, professional LinkedIn profile photo`;
 
     const negative_prompt =
       "cartoon, 3d render, vector, illustration, drawing, painting, bad eyes, distorted face, plastic skin, airbrushed, stock watermark, amateur, low resolution";
@@ -62,22 +62,48 @@ export async function POST(req: NextRequest) {
           id_weight: 1.0,
           width: width,
           height: height,
-          num_outputs: 1,
+          num_outputs: 2,
           output_format: "webp",
         },
       }
     );
 
-    let imageUrl = "";
+    let imageUrls: string[] = [];
     if (Array.isArray(output)) {
-      imageUrl = typeof output[0] === "string" ? output[0] : output[0]?.url?.() || String(output[0]);
+      imageUrls = output.map((item) =>
+        typeof item === "string" ? item : item?.url?.() || String(item)
+      );
     } else if (typeof output === "string") {
-      imageUrl = output;
+      imageUrls = [output];
     } else if (output?.url) {
-      imageUrl = output.url();
+      imageUrls = [output.url()];
     }
 
-    return NextResponse.json({ success: true, imageUrl });
+    return NextResponse.json({
+      success: true,
+      images: imageUrls,
+      imageUrl: imageUrls[0] || "",
+      metadata: {
+        backgroundTitle: bgDesc,
+        outfitTitle: outfitDesc,
+        hairstyleTitle: hairDesc,
+      },
+      results: imageUrls.map((url, idx) => ({
+        id: `gen-${Date.now()}-${idx}`,
+        imageUrl: url,
+        highResUrl: url,
+        originalAnchorUrl: targetImage,
+        aspectRatio: body.aspectRatio || "1:1",
+        positivePrompt: prompt,
+        negativePrompt: negative_prompt,
+        createdAt: new Date().toISOString(),
+        backgroundTitle: bgDesc,
+        hairstyleTitle: hairDesc,
+        outfitTitle: outfitDesc,
+        seed: Math.floor(Math.random() * 9000000) + 1000000,
+        photoReferenceCount: Array.isArray(body.photos) ? body.photos.length : 1
+      }))
+    });
   } catch (error: any) {
     const errorMsg = error?.response?.data?.detail || error?.message || String(error);
     console.error("Replicate execution error:", errorMsg);

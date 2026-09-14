@@ -5,14 +5,15 @@ import { GeneratedResult } from '../../lib/types';
 import { ComparisonSlider } from './comparison-slider';
 import { PromptInspector } from './prompt-inspector';
 import { DownloadModal } from './download-modal';
-import { Download, Terminal, Sliders } from 'lucide-react';
+import { Download, Terminal, Sliders, Square, Circle } from 'lucide-react';
 import { useTheme } from '../../lib/theme-context';
 
 interface ResultCardProps {
   result: GeneratedResult;
+  globalCirclePreview?: boolean;
 }
 
-export const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
+export const ResultCard: React.FC<ResultCardProps> = ({ result, globalCirclePreview = false }) => {
   const { theme } = useTheme();
   const isLight = theme === 'light';
   const isTerracotta = theme === 'terracotta';
@@ -20,6 +21,12 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
   const [showInspector, setShowInspector] = useState(false);
   const [showDownload, setShowDownload] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
+  const [isCirclePreview, setIsCirclePreview] = useState(globalCirclePreview);
+
+  // Clean metadata formatting without stray trailing punctuation
+  const title = result.backgroundTitle || "Executive Office";
+  const subtitleParts = [result.hairstyleTitle, result.outfitTitle].filter(Boolean);
+  const subtitle = subtitleParts.length > 0 ? subtitleParts.join(" • ") : "";
 
   return (
     <div className={`border rounded-2xl overflow-hidden shadow-lg transition-all flex flex-col justify-between group ${
@@ -29,10 +36,42 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
         ? 'bg-white border-[#E8DFD5] hover:border-[#D6C4B4]'
         : 'bg-slate-900/90 border-slate-800 hover:border-slate-700'
     }`}>
-      {/* Visual Header Image - Full Bleed Card Framing */}
-      <div className="relative w-full overflow-hidden rounded-t-2xl">
+      {/* Visual Header Image & LinkedIn Circle Toggle */}
+      <div className="relative w-full overflow-hidden rounded-t-2xl bg-slate-950 p-2">
+        {/* Toggle Bar */}
+        <div className="flex items-center justify-between pb-2 px-1 text-[10px] font-semibold text-slate-400">
+          <span className="text-amber-400/90">
+            {result.aspectRatio || '1:1'} • {result.photoReferenceCount || 1} Photos
+          </span>
+
+          <div className="flex items-center space-x-1 bg-slate-900 border border-slate-800 p-0.5 rounded-lg">
+            <button
+              type="button"
+              onClick={() => setIsCirclePreview(false)}
+              className={`px-2 py-0.5 rounded-md flex items-center space-x-1 transition-all ${
+                !isCirclePreview ? 'bg-amber-500 text-slate-950 font-bold' : 'hover:text-white'
+              }`}
+              title="Full Square View"
+            >
+              <Square className="h-3 w-3" />
+              <span>Full</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsCirclePreview(true)}
+              className={`px-2 py-0.5 rounded-md flex items-center space-x-1 transition-all ${
+                isCirclePreview ? 'bg-amber-500 text-slate-950 font-bold' : 'hover:text-white'
+              }`}
+              title="LinkedIn Avatar Preview"
+            >
+              <Circle className="h-3 w-3" />
+              <span>LinkedIn</span>
+            </button>
+          </div>
+        </div>
+
         {showComparison ? (
-          <div className="p-2 bg-slate-950">
+          <div className="p-1 bg-slate-950">
             <ComparisonSlider
               originalUrl={result.originalAnchorUrl}
               generatedUrl={result.imageUrl}
@@ -47,30 +86,35 @@ export const ResultCard: React.FC<ResultCardProps> = ({ result }) => {
             </button>
           </div>
         ) : (
-          <div className={`relative w-full ${
+          <div className={`relative w-full flex items-center justify-center p-1 ${
             result.aspectRatio === '1:1' ? 'aspect-square' : 'aspect-[4/5]'
           }`}>
-            <img
-              src={result.imageUrl}
-              alt="Generated African Headshot"
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
-            <div className="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md px-2.5 py-1 rounded-md text-[10px] font-bold text-amber-300 border border-amber-500/20 shadow-md">
-              {result.aspectRatio} • {result.photoReferenceCount} Photos Dataset
+            <div className={`relative w-full h-full transition-all duration-300 overflow-hidden ${
+              isCirclePreview
+                ? 'rounded-full aspect-square max-w-[85%] max-h-[85%] mx-auto border-4 border-amber-500/80 shadow-2xl'
+                : 'rounded-xl'
+            }`}>
+              <img
+                src={result.imageUrl}
+                alt="Generated African Headshot"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
             </div>
           </div>
         )}
       </div>
 
-      {/* Details Footer */}
+      {/* Details Footer - Clean Title & Subtitle without floating periods */}
       <div className="p-4 space-y-3">
         <div>
           <h5 className={`font-bold text-sm truncate ${isLight ? 'text-slate-900' : isTerracotta ? 'text-[#2D241E]' : 'text-white'}`}>
-            {result.backgroundTitle}
+            {title}
           </h5>
-          <p className="text-xs opacity-75 truncate mt-0.5">
-            {result.hairstyleTitle} • {result.outfitTitle}
-          </p>
+          {subtitle && (
+            <p className="text-xs opacity-75 truncate mt-0.5">
+              {subtitle}
+            </p>
+          )}
         </div>
 
         {/* Action Buttons */}

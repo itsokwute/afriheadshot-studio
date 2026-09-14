@@ -20,7 +20,7 @@ import {
   GenerationConfig
 } from '../lib/types';
 import { BACKGROUND_PRESETS, HAIRSTYLE_PRESETS, OUTFIT_PRESETS } from '../lib/presets-data';
-import { Camera, Zap, ShieldCheck, CheckCircle2, History, ArrowRight, Sparkles, Layers, Sliders } from 'lucide-react';
+import { Camera, Zap, ShieldCheck, CheckCircle2, History, ArrowRight, Sparkles, Layers, Sliders, Square, Circle } from 'lucide-react';
 
 function StudioApp() {
   const { theme } = useTheme();
@@ -33,6 +33,9 @@ function StudioApp() {
 
   // Active step wizard tracker for first-timers (1: Upload, 2: Crop, 3: Style Matrix, 4: Results)
   const [activeStep, setActiveStep] = useState<number>(1);
+
+  // Global LinkedIn avatar circle preview toggle state in gallery view
+  const [globalCirclePreview, setGlobalCirclePreview] = useState<boolean>(false);
 
   // State management for Crop Aspect Ratio
   const [aspectRatio, setAspectRatio] = useState<AspectRatio>('1:1');
@@ -85,7 +88,7 @@ function StudioApp() {
       setProgress({
         stage: 'generating',
         percent: 75,
-        message: 'Synthesizing Studio Lighting & Attire...',
+        message: 'Synthesizing Studio Lighting & Attire (Generating 2 Variations)...',
         stepDetails: `Setting background: ${selectedBackground.title}`
       });
 
@@ -108,22 +111,46 @@ function StudioApp() {
       });
 
       if (!res.ok) {
-        throw new Error('Generation service returned an error');
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Generation service returned an error');
       }
 
-      const generatedData: GeneratedResult = await res.json();
+      const resData = await res.json();
+
+      let newHeadshots: GeneratedResult[] = [];
+      if (Array.isArray(resData.results) && resData.results.length > 0) {
+        newHeadshots = resData.results;
+      } else if (Array.isArray(resData.images) && resData.images.length > 0) {
+        newHeadshots = resData.images.map((imgUrl: string, idx: number) => ({
+          id: `gen-${Date.now()}-${idx}`,
+          imageUrl: imgUrl,
+          highResUrl: imgUrl,
+          originalAnchorUrl: anchorPhoto ? anchorPhoto.url : '',
+          aspectRatio,
+          positivePrompt: '',
+          negativePrompt: '',
+          createdAt: new Date().toISOString(),
+          backgroundTitle: resData.metadata?.backgroundTitle || selectedBackground.title,
+          hairstyleTitle: resData.metadata?.hairstyleTitle || selectedHairstyle.title,
+          outfitTitle: resData.metadata?.outfitTitle || selectedOutfit.title,
+          seed: Math.floor(Math.random() * 9000000) + 1000000,
+          photoReferenceCount: photos.length
+        }));
+      } else {
+        newHeadshots = [resData];
+      }
 
       setProgress({
         stage: 'completed',
         percent: 100,
-        message: 'Headshot Render Complete!'
+        message: 'Batch Headshot Render Complete!'
       });
 
-      setResults((prev) => [generatedData, ...prev]);
+      setResults((prev) => [...newHeadshots, ...prev]);
       setActiveStep(4);
     } catch (err: any) {
       console.error(err);
-      alert('Generation error. Please check your network or try again.');
+      alert(err.message || 'Generation error. Please check your network or try again.');
     } finally {
       setIsGenerating(false);
     }
@@ -299,8 +326,8 @@ function StudioApp() {
                 <Zap className="h-6 w-6 fill-slate-950" />
                 <span>
                   {isGenerating
-                    ? 'Processing AI Pipeline...'
-                    : `Generate Studio Headshot (${photos.length} Photos Dataset)`}
+                    ? 'Processing AI Batch Pipeline...'
+                    : `Generate 2 Studio Headshots (${photos.length} Photos Dataset)`}
                 </span>
               </button>
             </div>
@@ -317,7 +344,7 @@ function StudioApp() {
         {/* Step 4 / Gallery Panel: Results Gallery */}
         {(activeStep === 4 || results.length > 0) && (
           <section className="pt-6 space-y-6 border-t border-slate-200/40">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="flex items-center space-x-2">
                 <History className="h-5 w-5 text-amber-500" />
                 <h3 className="font-bold text-xl">Generated Headshots Studio Gallery</h3>
@@ -326,19 +353,47 @@ function StudioApp() {
                 </span>
               </div>
 
-              <button
-                type="button"
-                onClick={() => setActiveStep(3)}
-                className="text-xs font-semibold text-amber-500 hover:underline flex items-center space-x-1"
-              >
-                <span>+ Create Another Variant</span>
-              </button>
+              {/* Global Gallery Preview Mode Toggle */}
+              <div className="flex items-center space-x-3">
+                <div className={`flex items-center space-x-1 p-1 rounded-xl border text-xs font-semibold ${
+                  isLight ? 'bg-slate-100 border-slate-200' : isTerracotta ? 'bg-[#F4EBE2] border-[#E8DFD5]' : 'bg-slate-900 border-slate-800'
+                }`}>
+                  <button
+                    type="button"
+                    onClick={() => setGlobalCirclePreview(false)}
+                    className={`px-3 py-1 rounded-lg flex items-center space-x-1 transition-all ${
+                      !globalCirclePreview ? 'bg-amber-500 text-slate-950 font-bold shadow-md' : 'opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <Square className="h-3.5 w-3.5" />
+                    <span>Square (1:1)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setGlobalCirclePreview(true)}
+                    className={`px-3 py-1 rounded-lg flex items-center space-x-1 transition-all ${
+                      globalCirclePreview ? 'bg-amber-500 text-slate-950 font-bold shadow-md' : 'opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <Circle className="h-3.5 w-3.5" />
+                    <span>LinkedIn Avatar Preview</span>
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveStep(3)}
+                  className="text-xs font-semibold text-amber-500 hover:underline flex items-center space-x-1"
+                >
+                  <span>+ Create Another Variant</span>
+                </button>
+              </div>
             </div>
 
             {results.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {results.map((res) => (
-                  <ResultCard key={res.id} result={res} />
+                  <ResultCard key={res.id} result={res} globalCirclePreview={globalCirclePreview} />
                 ))}
               </div>
             ) : (
